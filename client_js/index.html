@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SaoVPN Client</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-box">
+        <h1 class="title">SaoVPN</h1>
+        
+        <div id="credentials-box">
+            <input type="text" id="user" placeholder="Identity / User" class="input-field" autofocus>
+            
+            <input type="password" id="pass" placeholder="Access Key" class="input-field">
+        </div>
+
+        <button id="btn" class="connect-btn">INITIALIZE LINK</button>
+        
+        <p id="status-msg" style="margin-top:15px; font-size:12px; color:#444; font-family: monospace;">
+            WAITING FOR INPUT...
+        </p>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const btn = document.getElementById('btn');
+        const statusMsg = document.getElementById('status-msg');
+        const credsBox = document.getElementById('credentials-box');
+        
+        let isConnected = false;
+
+        btn.addEventListener('click', () => {
+            if (!isConnected) {
+                const user = document.getElementById('user').value;
+                const pass = document.getElementById('pass').value;
+
+                if (!user || !pass) {
+                    statusMsg.innerText = "ERROR: CREDENTIALS REQUIRED";
+                    statusMsg.style.color = "red";
+                    return;
+                }
+                
+                btn.innerText = "AUTHENTICATING...";
+                btn.style.color = "yellow";
+                btn.style.borderColor = "yellow";
+                btn.disabled = true;
+                statusMsg.innerText = "NEGOTIATING QUANTUM KEYS...";
+
+                ipcRenderer.send('vpn-action', { type: 'connect', user, pass });
+
+            } else {
+                btn.innerText = "TERMINATING...";
+                statusMsg.innerText = "CLEANING DNS CACHE...";
+                ipcRenderer.send('vpn-action', { type: 'disconnect' });
+            }
+        });
+
+        
+        ipcRenderer.on('vpn-status', (event, data) => {
+            if (data.status === 'connected') {
+                isConnected = true;
+   
+                btn.innerText = "SYSTEM CONNECTED";
+                btn.style.color = "#00ff00"; 
+                btn.style.borderColor = "#00ff00";
+                btn.style.boxShadow = "0 0 15px #00ff00";
+                btn.disabled = false;
+                
+                credsBox.style.display = 'none';
+                
+                statusMsg.innerText = "SECURE TUNNEL ESTABLISHED via .clau";
+                statusMsg.style.color = "#00ff00";
+
+            } else if (data.status === 'disconnected') {
+                window.close();
+
+            } else if (data.status === 'error') {
+                isConnected = false;
+                btn.innerText = "RETRY CONNECTION";
+                btn.style.color = "red";
+                btn.style.borderColor = "red";
+                btn.disabled = false;
+                
+                statusMsg.innerText = data.msg || "CONNECTION FAILED";
+                statusMsg.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

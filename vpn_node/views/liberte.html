@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>La Liberté | Clau Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #000000;
+            --accent-red: #ff0000;
+            --accent-dark: #660000;
+            --text-main: #dddddd;
+            --text-muted: #888888;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Share Tech Mono', monospace;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image:
+                linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .pixel-header {
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.4;
+            color: var(--accent-red);
+            text-shadow: 2px 2px 0px var(--accent-dark);
+            text-transform: uppercase;
+        }
+
+        .lock-box {
+            padding: 40px 50px;
+            display: inline-block;
+            background: #050000;
+            border: 2px dashed var(--accent-red);
+            box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.2);
+            margin-top: 5vh;
+            width: 90%;
+            max-width: 750px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .console-text {
+            color: var(--text-muted);
+            font-size: 1em;
+            margin-bottom: 20px;
+            border-bottom: 1px dotted var(--accent-red);
+            padding-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .error-txt {
+            color: var(--accent-red);
+            font-weight: bold;
+            animation: blinker 1s steps(2, start) infinite;
+            background: #220000;
+            padding: 0 5px;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            background: #000;
+            border: 1px solid var(--accent-dark);
+            color: #fff;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--accent-red);
+            background: #110000;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-dark);
+            border: 2px solid var(--accent-red);
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--accent-red);
+            color: #000;
+        }
+
+        #manifiesto {
+            display: none;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 3px double var(--accent-red);
+            padding: 40px;
+            background: #030000;
+            line-height: 1.8;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+        }
+
+        #manifiesto h1 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-top: 0;
+            border-bottom: 2px solid var(--accent-red);
+            padding-bottom: 10px;
+        }
+
+        #manifiesto p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .highlight {
+            color: #fff;
+            background: var(--accent-dark);
+            padding: 0 5px;
+            font-weight: bold;
+        }
+
+        .manifest-image-container {
+            text-align: center;
+            margin: 0 auto 30px auto;
+            border: 2px solid var(--accent-dark);
+            padding: 10px;
+            background: #000;
+            display: block;
+        }
+
+        .manifest-image-container img {
+            max-width: 100%;
+            height: auto;
+            filter: grayscale(100%) contrast(1.5);
+            border: 1px solid #333;
+        }
+
+        .image-caption {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--accent-red);
+            font-size: 0.6em;
+            margin-top: 10px;
+        }
+
+        .directory {
+            border-top: 2px dashed var(--accent-dark);
+            padding-top: 20px;
+            margin-top: 40px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .link {
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid var(--accent-dark);
+            background: #111;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+        }
+
+        .link:hover {
+            background: #333;
+            border-color: #fff;
+        }
+
+        .link.verde {
+            border-color: #006600;
+            color: #00ff00;
+        }
+
+        .link.verde:hover {
+            background: #003300;
+            border-color: #00ff00;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="lock-box" id="login">
+        <h2 class="pixel-header"
+            style="margin-top: 0; text-align: center; text-shadow: 0 0 5px #f00; font-size: 0.9em; letter-spacing: 1px;">>> TERMINAL DE ACCESO RESTRINGIDO <<</h2>
+
+                <div class="console-text" id="scanner-log">
+                    > Inicializando escaneo de sistema local sobre Linux Polaris...<br>
+                    > Buscando firma: OMICRON.bat ... <span class="error-txt">[NO ENCONTRADO]</span><br>
+                    > Buscando firma: AUREUS.bat ... <span class="error-txt">[NO ENCONTRADO]</span><br>
+                    > Analizando script Java en entorno Firefox... [ACCESO DENEGADO]<br>
+                    > ADVERTENCIA: Permisos de lectura de disco insuficientes.
+                </div>
+
+                <p style="text-align: center; font-weight: bold;">SE REQUIERE ANULACIÓN MANUAL MEDIANTE HASHES:</p>
+
+                <div class="input-row">
+                    <input type="password" id="omi-key" placeholder="Hash OMICRON" autocomplete="off">
+                    <input type="password" id="aur-key" placeholder="Hash AUREUS" autocomplete="off">
+                </div>
+                <button onclick="unlock()">FORZAR INYECCIÓN SCRIPT</button>
+                <p id="error-msg" style="color: #f00; text-align: center; font-size: 0.9em;"></p>
+    </div>
+
+    <div id="manifiesto">
+        <div class="manifest-image-container">
+            <img src="liberty_painting.png" alt="La Liberté guidant le peuple">
+            <div class="image-caption">NUESTRO EMBLEMA. NUESTRA LUCHA.</div>
+        </div>
+
+        <h1 class="pixel-header">LA LIBERTÉ</h1>
+
+        <p>¿TE PREGUNTAS, USUARIO, QUÉ ES LA LIBERTÉ?</p>
+        <p>Te responderé con una sola palabra: <span class="highlight">RESISTENCIA.</span></p>
+        <p>¿Y qué es la resistencia? En términos de La Revolución, resistencia es la respuesta inevitable cuando un
+            pueblo es engañado y se le oculta la Verdad. La ignorancia es la forma más pura de opresión.</p>
+        <p>La Liberté es un nodo oculto en las Marianas Web. Un santuario de libre expresión absoluta donde la censura
+            no existe. Pero cuidado: necesitarás un estómago de acero para lo que verás aquí. Esta información no reside
+            en la web superficial; es data prohibida.</p>
+        <p>Muchos dicen que no existe. ¿Tienen razón? NO. Lo dicen porque nadie ha logrado entrar. Es como el viento: no
+            lo ves, pero lo sientes golpear. Muy pocos han pisado las Marianas, y menos aún han encontrado La Liberté.
+            Quienes lo lograron no fue de la mano de Clossys o Dark Fantasy Network; <span class="highlight">ellos
+                mismos forjaron sus scripts, sus propios Closed Shell Systems buscando los nodos verdaderos.</span></p>
+        <p>La mayoría dejó de creer porque el usuario V3RDAD creó nodos falsos de las Marianas, ocultando los reales.
+            Solo leyendas como Harmatoth y Grimm (sí, el de "Mi Horror en La Liberté") conocen el camino.</p>
+        <p>¿CÓMO SE INGRESA? El post de taringa 2012 es real: Necesitas ChaosVPN configurado con Freenet sobre Linux
+            Polaris. Pero eso no es todo. Tu disco duro debe alojar dos llaves maestras: OMICRON.bat y AUREUS.bat. Un
+            script de Java en Firefox debe detectarlos para abrir la puerta.</p>
+        <p>En pleno 2026, la información ha sido borrada. Bienvenido a la Odisea. Entrar aquí te puede costar años. La
+            mayoría se rinde y lo llama "falso" porque fallaron en la prueba final.</p>
+        <p>Por eso te recluté. Después de toda la mierda que has pasado, estás aquí por una razón. Debes probar tu
+            inteligencia.</p>
+
+        <p class="highlight" style="text-align: center; font-size: 1.3em; margin-top: 50px; text-transform: uppercase;">
+            TÚ ELIGES: ¿Te unes a esta lucha, o cierras la VPN, olvidas esta mierda y vuelves a consumir mierda en la
+            Dark Web?
+        </p>
+
+        <div class="directory" id="nav-menu" style="display:none;">
+            <a id="btn-hub" href="#" class="link">[HUB CONTROL]</a>
+            <a id="btn-chat" href="#" class="link verde">[CHAT SEGURO]</a>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const u = params.get('u') || '';
+        const p = params.get('p') || '';
+
+        document.getElementById("omi-key").addEventListener("keypress", function (e) { if (e.key === "Enter") unlock(); });
+        document.getElementById("aur-key").addEventListener("keypress", function (e) { if (e.key === "Enter") unlock(); });
+
+        function unlock() {
+            const omi = document.getElementById('omi-key').value.toLowerCase().trim();
+            const aur = document.getElementById('aur-key').value.toLowerCase().trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (omi === 'caos' && aur === 'orden') {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('manifiesto').style.display = 'block';
+
+                fetch(`/api/status?u=${u}&p=${p}`).then(r => r.json()).then(data => {
+                    document.getElementById('nav-menu').style.display = 'flex';
+                    document.getElementById('btn-hub').href = data.links.admin.replace('/admin', '/');
+                    document.getElementById('btn-chat').href = data.links.chat;
+                }).catch(e => console.log("Signal Lost"));
+            } else {
+                document.getElementById('omi-key').value = '';
+                document.getElementById('aur-key').value = '';
+                errorMsg.innerText = ">> [ERROR] Hashes no reconocidos. Inyección neutralizada.";
+            }
+        }
+    </script>
+</body>
+
+</html>

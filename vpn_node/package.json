@@ -1,0 +1,12 @@
+{
+  "name": "sao-vpn-router",
+  "version": "2.0.0",
+  "description": "Enrutador de dominios .clau con seguridad cuantica",
+  "main": "sao_vpn_router.js",
+  "scripts": {
+    "start": "node sao_vpn_router.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600&display=swap');
+
+:root {
+    --bg-deep: #050507;
+    --bg-mid: #0a0a0e;
+    --accent-red: #d32f2f;
+    --accent-glow: #ff4d4d;
+    --text-main: #e0e0e0;
+    --glass-bg: rgba(15, 15, 18, 0.75);
+    --glass-border: rgba(211, 47, 47, 0.3);
+}
+
+body {
+    background: radial-gradient(circle at center, var(--bg-mid) 0%, var(--bg-deep) 100%);
+    font-family: 'Rajdhani', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    user-select: none;
+    color: var(--text-main);
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(211, 47, 47, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(211, 47, 47, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: -1;
+}
+
+.login-box {
+    text-align: center;
+    width: 320px;
+    background: var(--glass-bg); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border); 
+    border-top: 2px solid var(--accent-red);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(211, 47, 47, 0.1);
+    padding: 30px 25px;
+    border-radius: 4px;
+}
+
+.title {
+    color: var(--text-main);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2.2rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 16px;
+    background-color: rgba(0,0,0,0.3);
+    color: var(--text-main);
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input-field:focus {
+    border-bottom-color: var(--accent-glow);
+    background: rgba(211, 47, 47, 0.02);
+    box-shadow: 0 5px 15px -10px rgba(255, 77, 77, 0.3);
+}
+
+.input-field::placeholder {
+    color: #555;
+    letter-spacing: 1px;
+}
+
+.connect-btn {
+    margin-top: 10px;
+    padding: 12px 0;
+    width: 100%;
+    background-color: transparent;
+    color: var(--accent-red);
+    border: 1px solid var(--accent-red);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.connect-btn:hover:not([disabled]) {
+    background-color: var(--accent-red);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.5);
+}
+
+.connect-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#status-msg {
+    color: #888;
+    font-size: 12px;
+    margin-top: 20px;
+    min-height: 20px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ROOT CONTROL | Clau Network</title>
+    <style>
+        body { background: #050505; color: #ff0; font-family: 'Courier New', monospace; padding: 40px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .panel { border: 2px solid #ff0; padding: 40px; background: rgba(20,20,0,0.8); box-shadow: 0 0 30px rgba(255,255,0,0.1); width: 600px; }
+        h1 { margin-top: 0; border-bottom: 1px dashed #ff0; padding-bottom: 15px; letter-spacing: 2px; }
+        .stat { margin: 15px 0; font-size: 1.2em; border-left: 3px solid #ff0; padding-left: 10px; }
+        
+        .directory { border-top: 1px dashed #550; padding-top: 20px; margin-top: 30px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .link { color: #000; background: #ff0; text-decoration: none; padding: 10px 15px; font-weight: bold; transition: 0.3s; font-size: 0.9em; }
+        .link:hover { background: #fff; box-shadow: 0 0 10px #fff; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h1> ROOT CONTROL - SAO</h1>
+        <div class="stat">>>> ESTADO DEL NÚCLEO: <span style="color:#0f0;">ÓPTIMO</span></div>
+        <div class="stat">>>> INFRAESTRUCTURA: DARKVPN</div>
+        <div class="stat">>>> FILTRO ANTI-INTRUSOS: ACTIVADO</div>
+        
+        <p style="color: #aaa; margin-top: 30px;">Desde este panel confirmas que el despliegue cuántico ha sido exitoso en todos los nodos.</p>
+        
+        <div class="directory" id="nav-menu" style="display:none;">
+            <a id="btn-hub" href="#" class="link">> HUB</a>
+            <a id="btn-chat" href="#" class="link">> CHAT</a>
+            <a id="btn-liberte" href="#" class="link" style="background: #f00; color: #fff;">> LIBERTÉ</a>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        fetch(`/api/status?u=${params.get('u')}&p=${params.get('p')}`).then(r => r.json()).then(data => {
+            document.getElementById('nav-menu').style.display = 'flex';
+            document.getElementById('btn-hub').href = data.links.admin.replace('/admin', '/');
+            document.getElementById('btn-chat').href = data.links.chat;
+            document.getElementById('btn-liberte').href = data.links.liberte;
+        });
+    </script>
+</body>
+</html>
