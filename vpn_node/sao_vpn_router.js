@@ -28,7 +28,14 @@ let SYSTEM = {
     dom_liberte: null, 
     dom_unknown: null, 
     dom_chat: null, 
-    dom_exam: null 
+    dom_exam: null,
+    dom_arach: null,
+    dom_tool1: null,
+    dom_tool2: null,
+    dom_tool3: null,
+    dom_tool4: null,
+    dom_tool5: null,
+    dom_tool6: null
 };
 
 let CHAT_HISTORY = [{ user: 'SYSTEM', msg: 'Clau-Core online over DarkVPN.', time: '00:00' }];
@@ -71,8 +78,15 @@ function bootSystem() {
                 SYSTEM.dom_unknown = `${generateDomain(SYSTEM.key + "VOID")}.clau`;
                 SYSTEM.dom_chat = `${generateDomain(SYSTEM.key + "CHAT")}.clau`;
                 SYSTEM.dom_exam = `${generateDomain(SYSTEM.key + "EXAM")}.clau`;
+                SYSTEM.dom_arach = `${generateDomain(SYSTEM.key + "ARACH")}.arach`;
+                SYSTEM.dom_tool1 = `${generateDomain(SYSTEM.key + "ARACH1")}.arach`;
+                SYSTEM.dom_tool2 = `${generateDomain(SYSTEM.key + "ARACH2")}.arach`;
+                SYSTEM.dom_tool3 = `${generateDomain(SYSTEM.key + "ARACH3")}.arach`;
+                SYSTEM.dom_tool4 = `${generateDomain(SYSTEM.key + "ARACH4")}.arach`;
+                SYSTEM.dom_tool5 = `${generateDomain(SYSTEM.key + "ARACH5")}.arach`;
+                SYSTEM.dom_tool6 = `${generateDomain(SYSTEM.key + "ARACH6")}.arach`;
 
-                console.log(`>>DNS::${SYSTEM.dom_hub}::${SYSTEM.dom_liberte}::${SYSTEM.dom_unknown}::${SYSTEM.dom_chat}::${SYSTEM.dom_exam}::DNS<<`);
+                console.log(`>>DNS::${SYSTEM.dom_hub}::${SYSTEM.dom_liberte}::${SYSTEM.dom_unknown}::${SYSTEM.dom_chat}::${SYSTEM.dom_exam}::${SYSTEM.dom_arach}::${SYSTEM.dom_tool1}::${SYSTEM.dom_tool2}::${SYSTEM.dom_tool3}::DNS<<`);
                 
                 saveLinksToFile();
             } else {
@@ -106,6 +120,15 @@ ENLACES DE ACCESO LIMPIOS (.clau)
 4. CHAT SEGURO:  http://${SYSTEM.dom_chat}/
 5. GATEKEEPER:   http://${SYSTEM.dom_exam}/
 6. ADMIN ROOT:   http://${SYSTEM.dom_hub}/admin
+-------------------------------------------------------------
+[RED OCULTA ARACHNE]
+7. ARACHNE NEST:    http://${SYSTEM.dom_arach}/
+8. TOOL-1 ENTROPY:  http://${SYSTEM.dom_tool1}/
+9. TOOL-2 SCANNER:  http://${SYSTEM.dom_tool2}/
+10.TOOL-3 CRACKER:  http://${SYSTEM.dom_tool3}/
+11.TOOL-4 CIPHER:   http://${SYSTEM.dom_tool4}/
+12.TOOL-5 STEGO:    http://${SYSTEM.dom_tool5}/
+13.TOOL-6 QKD:      http://${SYSTEM.dom_tool6}/
 =============================================================
 `;
     fs.writeFile(path.join(__dirname, 'CLAU_COORDS.txt'), contenido, (err) => {
@@ -118,7 +141,7 @@ app.use((req, res, next) => {
     const isLocalOrIP = host.includes('localhost') || host.match(/^[0-9.]+$/);
     
     if (!Object.values(SYSTEM).includes(host) && !isLocalOrIP && !host.includes('.dark')) {
-        return res.status(403).send("⛔ PROTOCOLO DENEGADO. ACCEDA MEDIANTE CLAU NETWORK.");
+        return res.status(403).send("⛔ PROTOCOLO DENEGADO. ACCEDA MEDIANTE CLAU NETWORK O ARACHNE.");
     }
     
     if (BLACKLIST.has(req.ip)) {
@@ -140,6 +163,13 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
     if (req.currentHost === SYSTEM.dom_chat) return checkAuth(req, res, () => serveChat(res));
+    if (req.currentHost === SYSTEM.dom_arach) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne.html')));
+    if (req.currentHost === SYSTEM.dom_tool1) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool1.html')));
+    if (req.currentHost === SYSTEM.dom_tool2) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool2.html')));
+    if (req.currentHost === SYSTEM.dom_tool3) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool3.html')));
+    if (req.currentHost === SYSTEM.dom_tool4) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool4.html')));
+    if (req.currentHost === SYSTEM.dom_tool5) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool5.html')));
+    if (req.currentHost === SYSTEM.dom_tool6) return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool6.html')));
     if (req.currentHost === SYSTEM.dom_exam) return res.sendFile(path.join(__dirname, 'views', 'exam.html'));
     if (req.currentHost === SYSTEM.dom_liberte) return res.sendFile(path.join(__dirname, 'views', 'liberte.html'));
     if (req.currentHost === SYSTEM.dom_unknown) return res.sendFile(path.join(__dirname, 'views', 'unknown.html'));
@@ -189,9 +219,89 @@ app.get('/api/status', (req, res) => {
             unknown: `http://${SYSTEM.dom_unknown}/`,
             chat: `http://${SYSTEM.dom_chat}/${authQuery}`,
             exam: `http://${SYSTEM.dom_exam}/`,
+            arachne: `http://${SYSTEM.dom_arach}/${authQuery}`,
+            tool1: `http://${SYSTEM.dom_tool1}/${authQuery}`,
+            tool2: `http://${SYSTEM.dom_tool2}/${authQuery}`,
+            tool3: `http://${SYSTEM.dom_tool3}/${authQuery}`,
+            tool4: `http://${SYSTEM.dom_tool4}/${authQuery}`,
+            tool5: `http://${SYSTEM.dom_tool5}/${authQuery}`,
+            tool6: `http://${SYSTEM.dom_tool6}/${authQuery}`,
             admin: `http://${SYSTEM.dom_hub}/admin${authQuery}`
         }
     });
+});
+
+// Arachne Quantum API — entropía cuántica desde Cirq
+app.get('/api/quantum-random', (req, res) => {
+    const n = Math.min(parseInt(req.query.n) || 32, 256);
+    const py = spawn('python', [path.join(__dirname, '..', 'quantum_core', 'quantum_random.py'), n.toString()]);
+    let out = '';
+    py.stdout.on('data', d => out += d);
+    py.stderr.on('data', () => {});
+    py.on('close', () => {
+        try { res.json(JSON.parse(out)); }
+        catch { res.json({ status: 'error', hex: require('crypto').randomBytes(n).toString('hex'), source: 'fallback_node' }); }
+    });
+});
+
+// Post-Quantum Crypto API — LWE-256 keygen/encrypt/decrypt
+app.get('/api/pq-keygen', (req, res) => {
+    const py = spawn('python', [path.join(__dirname, '..', 'quantum_core', 'post_quantum.py'), 'keygen']);
+    let out = '';
+    py.stdout.on('data', d => out += d);
+    py.stderr.on('data', () => {});
+    py.on('close', () => {
+        try { res.json(JSON.parse(out)); }
+        catch { res.status(500).json({ status: 'error', message: 'keygen failed' }); }
+    });
+});
+
+app.post('/api/pq-encrypt', express.json({ limit: '5mb' }), (req, res) => {
+    const { public_key, message } = req.body;
+    if (!public_key || !message) return res.status(400).json({ status: 'error', message: 'public_key y message requeridos' });
+    const py = spawn('python', [
+        path.join(__dirname, '..', 'quantum_core', 'post_quantum.py'),
+        'encrypt', JSON.stringify(public_key), message
+    ]);
+    let out = '';
+    py.stdout.on('data', d => out += d);
+    py.stderr.on('data', () => {});
+    py.on('close', () => {
+        try { res.json(JSON.parse(out)); }
+        catch { res.status(500).json({ status: 'error', message: 'encrypt failed' }); }
+    });
+});
+
+app.post('/api/pq-decrypt', express.json({ limit: '50mb' }), (req, res) => {
+    const { private_key, ciphertext } = req.body;
+    if (!private_key || !ciphertext) return res.status(400).json({ status: 'error', message: 'private_key y ciphertext requeridos' });
+    const py = spawn('python', [
+        path.join(__dirname, '..', 'quantum_core', 'post_quantum.py'),
+        'decrypt', JSON.stringify(private_key), JSON.stringify(ciphertext)
+    ]);
+    let out = '';
+    py.stdout.on('data', d => out += d);
+    py.stderr.on('data', () => {});
+    py.on('close', () => {
+        try { res.json(JSON.parse(out)); }
+        catch { res.status(500).json({ status: 'error', message: 'decrypt failed' }); }
+    });
+});
+
+// Arachne tool sub-routes (only accessible from the .arach domain)
+app.get('/tool1', (req, res) => {
+    if (req.currentHost !== SYSTEM.dom_arach) return res.status(403).send('⛔ PROTOCOLO DENEGADO.');
+    return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool1.html')));
+});
+
+app.get('/tool2', (req, res) => {
+    if (req.currentHost !== SYSTEM.dom_arach) return res.status(403).send('⛔ PROTOCOLO DENEGADO.');
+    return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool2.html')));
+});
+
+app.get('/tool3', (req, res) => {
+    if (req.currentHost !== SYSTEM.dom_arach) return res.status(403).send('⛔ PROTOCOLO DENEGADO.');
+    return checkAuth(req, res, () => res.sendFile(path.join(__dirname, 'views', 'arachne_tool3.html')));
 });
 
 app.get('/admin', (req, res) => {

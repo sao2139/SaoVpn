@@ -2,16 +2,25 @@
 =============================================================
         CLAU NETWORK - HOSTED ON DARKVPN INFRASTRUCTURE
 =============================================================
-GENERADO: 17/3/2026, 8:02:45 p.m.
+GENERADO: 19/3/2026, 4:10:32 p.m.
 NÚCLEO: PYTHON QUANTUM CORE [v3.0-DARK_PYTHON_CORE]
 
 ENLACES DE ACCESO LIMPIOS (.clau)
 (Cada nodo requiere autenticación manual de usuario)
 
-1. HUB CENTRAL:  http://4s4f7x7g5qvcw74jq4olxhp5ghu7pm2sige6kmmya7fgf5c22mn.clau/
-2. LA LIBERTÉ:   http://c6qcd2xly2n77tsmep7rtdkak3h4r652vk5pqzq2uj4cnzqal34.clau/
-3. DATOS UNKNOWN:http://324w5esxhuhw435uipnrwgxk2jrb73b2hxhswy7qonw5saepkl7.clau/
-4. CHAT SEGURO:  http://yvt2gfdmaoauahelgikl7t6yiyhjeo4ff55cahw2u43n5ncmih7.clau/
-5. GATEKEEPER:   http://xaj2yf6jngvyo2xceurempqppwsg756hiurp5n4cufpotz6yjff.clau/
-6. ADMIN ROOT:   http://4s4f7x7g5qvcw74jq4olxhp5ghu7pm2sige6kmmya7fgf5c22mn.clau/admin
+1. HUB CENTRAL:  http://wgnlemvppa6dbr47dx7m43jviff55kwucvbfyt544ucihxczdx7.clau/
+2. LA LIBERTÉ:   http://p5c6azs26nqmwcrxq4rwvw2lbvwwv62irvitnmdhx5tl2yfkmio.clau/
+3. DATOS UNKNOWN:http://xj2qvwzekrwypxhxvt5b6r7avar7gxom7gcglcgkruib2mxw4w6.clau/
+4. CHAT SEGURO:  http://wamhac67aez6pmhpbqufobfw5t7s3v24x4qwyngn3ogygzynvaj.clau/
+5. GATEKEEPER:   http://jbazw7vm4kbbveymiklhjcoco2uom4xmteqf3kxcentrp2agaaf.clau/
+6. ADMIN ROOT:   http://wgnlemvppa6dbr47dx7m43jviff55kwucvbfyt544ucihxczdx7.clau/admin
+-------------------------------------------------------------
+[RED OCULTA ARACHNE]
+7. ARACHNE NEST:    http://5fu6qkisf52lyvvr5lgjrc65vmaxzfx3vwtuoac7jacj73a2dhn.arach/
+8. TOOL-1 ENTROPY:  http://evg7kiwjfv4vswjadxu6juzl2lmhr5p35pe2wk5aodo3e6wajvu.arach/
+9. TOOL-2 SCANNER:  http://ygry4jk4vwth5pzgyalvy2kxbp67vwhg3bbohrmmepxl5xjuf7i.arach/
+10.TOOL-3 CRACKER:  http://bkrxg7yf7gjyqvsrwmddm3vrqpdakkpxlhwln2ubnmvxbprtmmi.arach/
+11.TOOL-4 CIPHER:   http://dspaihfvr6vztn5qaopuxze4vuabtrwwaaw2s5vzjo3casbrz3k.arach/
+12.TOOL-5 STEGO:    http://3kyujuwdixsqfb54y5edlcfskc34puiukr5pk5kr5qed2ledjgk.arach/
+13.TOOL-6 QKD:      http://zxchy6erzfhrcwm5n5odskcbxfvl3lngw7wivrfnfoui6swimdi.arach/
 =============================================================

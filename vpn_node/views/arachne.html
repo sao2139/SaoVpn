@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ARACHNE NEST | Red Oculta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #000000;
+            --accent-red: #ff0000;
+            --accent-dark: #660000;
+            --text-main: #dddddd;
+        }
+
+        body { 
+            background: var(--bg-deep); 
+            color: var(--text-main); 
+            font-family: 'Share Tech Mono', monospace; 
+            padding: 20px; 
+            margin: 0; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .arachne-box {
+            padding: 40px;
+            display: inline-block;
+            background: #030000;
+            border: 2px solid var(--accent-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            margin-top: 5vh;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .pixel-header {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--accent-red);
+            text-shadow: 2px 2px 0px var(--accent-dark);
+            text-transform: uppercase;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .ascii-art {
+            color: var(--accent-red);
+            font-family: monospace;
+            white-space: pre;
+            font-size: 12px;
+            line-height: 1.2;
+            text-align: left;
+            display: inline-block;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px rgba(255,0,0,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .welcome-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            border-bottom: 1px dashed var(--accent-dark);
+            padding-bottom: 20px;
+            text-align: justify;
+        }
+
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tool-link {
+            display: block;
+            width: 80%;
+            padding: 15px;
+            background: #0a0000;
+            border: 1px dotted var(--accent-red);
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            transition: all 0.2s;
+            text-align: left;
+            position: relative;
+        }
+
+        .tool-link:hover {
+            background: var(--accent-dark);
+            color: #fff;
+            border: 1px solid #fff;
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .tool-link::before {
+            content: "> ";
+            color: var(--accent-red);
+        }
+
+        .tool-link:hover::before {
+            color: #fff;
+        }
+
+        .tool-desc {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2em;
+            color: #aaa;
+            margin-top: 8px;
+            text-transform: none;
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6em;
+            border-bottom: 1px solid #888;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8); }
+            100% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="arachne-box">
+        <h1 class="pixel-header">ARACHNE NEST // 127</h1>
+        
+        <div class="ascii-art">
+           (
+            )
+           (
+      /\  .-"""-.  /\
+     //\\/  ,,,  \//\\
+    |/\| ,;;;;;, |/\|
+    //\\\;-"""-;///\\
+  //  \/   .   \/  \\
+ (| ,-_| \ | / |_-, |)
+   //`__\.-.-./__`\\
+  // /.-(() ())-.\ \\
+ (\ |)   '---'   (| /)
+  ` (|           |) `
+    \)           (/
+        </div>
+
+        <div class="welcome-text">
+            Bienvenido a la red paralela ARACHNE127. Has logrado cruzar el velo cuántico. <br><br>
+            Aquí, las herramientas transcienden las limitaciones de la web superficial. Teje tus propios hilos y extrae la información del abismo. No hay reglas, solo nodos y probabilidad.
+        </div>
+
+        <div class="tools-container">
+            <a href="#" id="link-tool1" class="tool-link">
+                [ QUANTUM ENTROPY INJECTOR v3.0 ]
+                <span class="tool-desc" id="desc-tool1">Hash, PBKDF2, HMAC, archivos, generador y Base64. <span class="domain-tag">Cargando...</span></span>
+            </a>
+            <a href="#" id="link-tool2" class="tool-link">
+                [ WAVE-FUNCTION COLLAPSE SCANNER v2.0 ]
+                <span class="tool-desc" id="desc-tool2">Escáner TCP concurrente con fingerprinting y exportación. <span class="domain-tag">Cargando...</span></span>
+            </a>
+            <a href="#" id="link-tool3" class="tool-link">
+                [ ZERO-DAY TENSOR EXPLOIT KIT v2.0 ]
+                <span class="tool-desc" id="desc-tool3">Cracker por diccionario, fuerza bruta y mutaciones. <span class="domain-tag">Cargando...</span></span>
+            </a>
+            <a href="#" id="link-tool4" class="tool-link">
+                [ QUANTUM CIPHER SUITE ]
+                <span class="tool-desc" id="desc-tool4">Cifrado AES-256-GCM real con PBKDF2 y llaves ECDH P-256. <span class="domain-tag">Cargando...</span></span>
+            </a>
+            <a href="#" id="link-tool5" class="tool-link">
+                [ STEGANOGRAPHY ENGINE ]
+                <span class="tool-desc" id="desc-tool5">Oculta mensajes dentro de imágenes con codificación LSB. <span class="domain-tag">Cargando...</span></span>
+            </a>
+            <a href="#" id="link-tool6" class="tool-link">
+                [ QKD SIMULATOR — BB84 ]
+                <span class="tool-desc" id="desc-tool6">Distribución cuántica de llaves con detección de espías. <span class="domain-tag">Cargando...</span></span>
+            </a>
+        </div>
+
+        <a href="javascript:history.back()" class="back-btn">&lt;&lt; VOLVER</a>
+    </div>
+
+    <style>
+        .domain-tag { display:block; color: #f55; font-size:0.85em; margin-top:4px; letter-spacing: 0.5px; word-break: break-all; }
+    </style>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const u = params.get('u') || '';
+    const p = params.get('p') || '';
+
+    fetch(`/api/status?u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`)
+        .then(r => r.json())
+        .then(data => {
+            const tools = [
+                { id: 'tool1', link: data.links.tool1 },
+                { id: 'tool2', link: data.links.tool2 },
+                { id: 'tool3', link: data.links.tool3 },
+                { id: 'tool4', link: data.links.tool4 },
+                { id: 'tool5', link: data.links.tool5 },
+                { id: 'tool6', link: data.links.tool6 }
+            ];
+            tools.forEach(t => {
+                document.getElementById('link-' + t.id).href = t.link;
+                const host = new URL(t.link).host;
+                document.getElementById('desc-' + t.id).querySelector('.domain-tag').textContent = '>> ' + host;
+            });
+        })
+        .catch(() => {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById('link-tool' + i).href = `/tool${i}?u=${u}&p=${p}`;
+                document.getElementById('desc-tool' + i).querySelector('.domain-tag').textContent = '>> (enlace local)';
+            }
+        });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Wave-Function Collapse Scanner v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#000; --red:#ff0000; --dk:#660000; --txt:#ddd; }
+        * { box-sizing:border-box; }
+        body { background:var(--bg); color:var(--txt); font-family:'Share Tech Mono',monospace; padding:20px; margin:0; display:flex; flex-direction:column; align-items:center; }
+        .box { border:2px solid var(--dk); padding:30px; margin-top:3vh; width:95%; max-width:900px; }
+        h1 { font-family:'Press Start 2P',cursive; color:var(--red); font-size:0.95em; border-bottom:2px solid var(--dk); padding-bottom:12px; margin-top:0; }
+        .form-row { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:end; }
+        input,select { background:#050000; border:1px solid var(--dk); color:#fff; padding:10px; font-family:'Share Tech Mono',monospace; font-size:1em; outline:none; }
+        input[type="text"],input[type="number"]{ flex:1; min-width:80px; }
+        button { padding:10px 16px; background:var(--dk); border:1px solid var(--red); color:#fff; cursor:pointer; font-family:'Press Start 2P',cursive; font-size:0.6em; white-space:nowrap; }
+        button:hover { background:var(--red); color:#000; }
+        button:disabled { background:#222; border-color:#444; color:#666; cursor:wait; }
+        .progress { width:100%; height:12px; background:#111; border:1px solid #333; margin:10px 0; }
+        .fill { height:100%; background:var(--red); width:0%; transition:width 0.05s; }
+        .stats-bar { display:flex; justify-content:space-between; color:#888; font-size:0.85em; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+        .results { max-height:360px; overflow-y:auto; background:#030000; border:1px solid var(--dk); }
+        .row { display:flex; padding:8px 12px; border-bottom:1px solid #1a0000; align-items:center; gap:8px; transition:0.1s; }
+        .row:hover { background:#1a0000; }
+        .port { width:60px; color:#f55; font-weight:bold; }
+        .svc { width:100px; color:#aaa; }
+        .latency { width:70px; color:#ff0; text-align:right; }
+        .headers { flex:1; color:#666; font-size:0.8em; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+        .open { color:#0f0; }
+        .summary-box { background:#050000; border:1px dashed var(--dk); padding:15px; margin-top:15px; }
+        .summary-box h3 { font-family:'Press Start 2P',cursive; font-size:0.65em; color:var(--red); margin-top:0; }
+        .back { margin-top:20px; display:inline-block; color:#888; text-decoration:none; font-family:'Press Start 2P',cursive; font-size:0.5em; border-bottom:1px solid #888; text-align:center; width:100%; }
+        .back:hover { color:var(--red); }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>[ WAVE-FUNCTION COLLAPSE SCANNER v2.0 ]</h1>
+    <p>Escáner TCP con fingerprinting HTTP, medición de latencia y escaneo concurrente.</p>
+
+    <div class="form-row">
+        <input type="text" id="host" value="127.0.0.1" placeholder="Host">
+        <input type="number" id="pf" value="1" min="1" max="65535" placeholder="Desde">
+        <input type="number" id="pt" value="1024" min="1" max="65535" placeholder="Hasta">
+        <input type="number" id="timeout" value="350" min="50" max="5000" placeholder="Timeout ms">
+    </div>
+    <div class="form-row">
+        <select id="preset">
+            <option value="custom">Rango Personalizado</option>
+            <option value="common">Puertos Comunes (21-443)</option>
+            <option value="web">Web (80,443,8080,3000,5000)</option>
+            <option value="db">DB (3306,5432,6379,27017)</option>
+            <option value="full">Critical Full (21-9200)</option>
+        </select>
+        <input type="number" id="concurrent" value="10" min="1" max="50" placeholder="Concurrencia">
+        <button id="btn" onclick="startScan()">ESCANEAR</button>
+        <button onclick="cancelScan()">DETENER</button>
+        <button onclick="exportResults()">EXPORTAR</button>
+    </div>
+
+    <div class="progress"><div class="fill" id="pbar"></div></div>
+    <div class="stats-bar">
+        <span id="st-progress">0/0</span>
+        <span id="st-open">Abiertos: 0</span>
+        <span id="st-speed">0 puertos/s</span>
+        <span id="st-eta">ETA: --</span>
+    </div>
+    <div class="results" id="results"></div>
+
+    <div class="summary-box" id="summary" style="display:none">
+        <h3>RESUMEN DEL ESCANEO</h3>
+        <div id="summary-content"></div>
+    </div>
+
+    <a href="javascript:window.location.href='/' + window.location.search" class="back">&lt;&lt; VOLVER</a>
+</div>
+
+<script>
+const SVC={21:'FTP',22:'SSH',23:'Telnet',25:'SMTP',53:'DNS',80:'HTTP',110:'POP3',143:'IMAP',443:'HTTPS',993:'IMAPS',995:'POP3S',3000:'Node',3306:'MySQL',5432:'PostgreSQL',5000:'Flask',6379:'Redis',8080:'HTTP-Alt',8443:'HTTPS-Alt',8888:'Jupyter',9000:'Sonar',9200:'Elastic',27017:'MongoDB'};
+const PRESETS={common:Array.from({length:423},(_,i)=>21+i),web:[80,443,8080,8443,3000,5000,8000,8888],db:[3306,5432,6379,6380,27017,5984,9200],full:[21,22,23,25,53,80,110,143,443,993,995,3000,3306,5432,5000,6379,8080,8443,8888,9000,9200,27017]};
+let active=false,foundPorts=[];
+
+function cancelScan(){active=false;document.getElementById('btn').disabled=false;}
+
+async function probe(host,port,timeout){
+    const t0=performance.now();
+    try{
+        await fetch(`http://${host}:${port}/`,{mode:'no-cors',cache:'no-cache',signal:AbortSignal.timeout(timeout)});
+        return{port,open:true,latency:Math.round(performance.now()-t0),headers:''};
+    }catch(e){
+        if(e.name==='TimeoutError'||e.name==='AbortError')return{port,open:false};
+        return{port,open:e.message&&!e.message.includes('NetworkError'),latency:Math.round(performance.now()-t0)};
+    }
+}
+
+async function fingerprint(host,port){
+    try{
+        const r=await fetch(`http://${host}:${port}/`,{mode:'cors',cache:'no-cache',signal:AbortSignal.timeout(800)});
+        const hdrs=[];r.headers.forEach((v,k)=>hdrs.push(`${k}:${v}`));
+        return hdrs.join(' | ')||'(sin headers)';
+    }catch{return'(CORS/sin acceso)'}
+}
+
+async function startScan(){
+    if(active)return;active=true;foundPorts=[];
+    const host=document.getElementById('host').value.trim()||'127.0.0.1';
+    const timeout=parseInt(document.getElementById('timeout').value)||350;
+    const conc=parseInt(document.getElementById('concurrent').value)||10;
+    const preset=document.getElementById('preset').value;
+    let ports=[];
+    if(preset!=='custom'&&PRESETS[preset])ports=PRESETS[preset];
+    else{const f=parseInt(document.getElementById('pf').value),t=Math.min(parseInt(document.getElementById('pt').value),f+2000);for(let p=f;p<=t;p++)ports.push(p)}
+    
+    document.getElementById('btn').disabled=true;
+    document.getElementById('results').innerHTML='';
+    document.getElementById('summary').style.display='none';
+    const t0=Date.now();let done=0,openCount=0;
+    
+    // Concurrent scanning
+    const queue=[...ports];
+    async function worker(){
+        while(queue.length>0&&active){
+            const port=queue.shift();
+            const r=await probe(host,port,timeout);
+            done++;
+            document.getElementById('pbar').style.width=(done/ports.length*100)+'%';
+            const elapsed=(Date.now()-t0)/1000;
+            const speed=(done/elapsed).toFixed(1);
+            const eta=((ports.length-done)/speed).toFixed(0);
+            document.getElementById('st-progress').textContent=`${done}/${ports.length}`;
+            document.getElementById('st-speed').textContent=`${speed} p/s`;
+            document.getElementById('st-eta').textContent=`ETA: ${eta}s`;
+            
+            if(r.open){
+                openCount++;foundPorts.push(r);
+                document.getElementById('st-open').textContent=`Abiertos: ${openCount}`;
+                const hdrs=await fingerprint(host,port);
+                const row=document.createElement('div');row.className='row';
+                row.innerHTML=`<span class="port">${port}</span><span class="svc">${SVC[port]||'?'}</span><span class="open">ABIERTO</span><span class="latency">${r.latency}ms</span><span class="headers">${hdrs}</span>`;
+                document.getElementById('results').appendChild(row);
+            }
+        }
+    }
+    const workers=[];for(let i=0;i<conc;i++)workers.push(worker());
+    await Promise.all(workers);
+    
+    document.getElementById('btn').disabled=false;active=false;
+    if(foundPorts.length===0)document.getElementById('results').innerHTML='<div class="row" style="color:#555">> No se encontraron puertos abiertos.</div>';
+    
+    // Summary
+    const s=document.getElementById('summary');s.style.display='block';
+    document.getElementById('summary-content').innerHTML=`
+        <p>Host: ${host} | Puertos escaneados: ${ports.length} | Abiertos: ${openCount}</p>
+        <p>Tiempo: ${((Date.now()-t0)/1000).toFixed(1)}s | Velocidad media: ${(done/((Date.now()-t0)/1000)).toFixed(0)} puertos/s</p>
+        ${foundPorts.map(p=>`<span style="color:#0f0">${p.port}(${SVC[p.port]||'?'}) </span>`).join('')}
+    `;
+}
+
+function exportResults(){
+    if(!foundPorts.length)return alert('No hay resultados para exportar.');
+    const host=document.getElementById('host').value;
+    let txt=`# Arachne Scan — ${host} — ${new Date().toISOString()}\n`;
+    foundPorts.forEach(p=>{txt+=`PORT ${p.port} OPEN (${SVC[p.port]||'?'}) latency=${p.latency}ms\n`});
+    const blob=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download=`scan_${host}_${Date.now()}.txt`;a.click();
+}
+</script>
+</body>
+</html>

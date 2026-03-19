@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>QKD Simulator - BB84</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#000;--red:#f00;--dk:#600;--txt:#ddd;--cyan:#0ff;--grn:#0f0}
+        *{box-sizing:border-box}
+        body{background:var(--bg);color:var(--txt);font-family:'Share Tech Mono',monospace;padding:20px;margin:0;display:flex;flex-direction:column;align-items:center}
+        .box{border:2px solid var(--dk);padding:30px;margin-top:3vh;width:95%;max-width:950px}
+        h1{font-family:'Press Start 2P',cursive;color:var(--red);font-size:.85em;text-align:center;border-bottom:2px solid var(--dk);padding-bottom:12px;margin-top:0}
+        label{font-family:'Press Start 2P',cursive;font-size:.55em;color:var(--red);display:block;margin-bottom:5px;margin-top:12px}
+        input,select{width:100%;background:#050000;border:1px solid var(--dk);color:#fff;font-family:'Share Tech Mono',monospace;font-size:1em;padding:10px;outline:none;margin-bottom:12px}
+        .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+        button{padding:10px 18px;background:var(--dk);border:1px solid var(--red);color:#fff;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:.6em}
+        button:hover{background:var(--red);color:#000}
+        .protocol-view{background:#030000;border:1px solid var(--dk);padding:15px;overflow-x:auto;margin:10px 0}
+        table{border-collapse:collapse;width:100%;font-size:.85em}
+        th{font-family:'Press Start 2P',cursive;font-size:.5em;color:var(--red);padding:8px 4px;border-bottom:2px solid var(--dk);text-align:center}
+        td{padding:6px 4px;text-align:center;border-bottom:1px solid #1a0000}
+        .basis-match td{background:#001a00}
+        .qubit{font-size:1.4em;font-weight:bold}
+        .q-h{color:#ff0}.q-v{color:var(--cyan)}.q-d{color:#f80}.q-a{color:#f0f}
+        .match{color:var(--grn)}.nomatch{color:#f00}
+        .key-box{background:#0a0000;border:2px solid var(--grn);padding:15px;margin:15px 0;text-align:center}
+        .key-box .val{color:var(--grn);font-size:1.2em;letter-spacing:3px;font-weight:bold}
+        .stat{color:#888;font-size:.85em;margin-top:8px}
+        .section{margin-top:20px;border-top:1px dashed var(--dk);padding-top:15px}
+        .back{margin-top:20px;display:inline-block;color:#888;text-decoration:none;font-family:'Press Start 2P',cursive;font-size:.5em;border-bottom:1px solid #888;text-align:center;width:100%}
+        .back:hover{color:var(--red)}
+        .eve-alert{background:#300;border:2px solid #f00;padding:15px;margin:15px 0;color:#f55}
+        .eve-alert h3{color:#f00;font-family:'Press Start 2P',cursive;font-size:.65em;margin-top:0}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>[ QKD SIMULATOR — BB84 ]</h1>
+    <p>Simulador del protocolo BB84 de distribución cuántica de llaves. Dos partes (Alice y Bob) generan una llave secreta compartida que es imposible de interceptar sin dejar rastro.</p>
+
+    <label>NÚMERO DE QUBITS:</label>
+    <input type="number" id="n-qubits" value="20" min="8" max="64">
+
+    <label>SIMULAR ESPÍA (EVE):</label>
+    <select id="eve-mode">
+        <option value="no">Sin espía — Canal cuántico seguro</option>
+        <option value="yes">Con espía (EVE intercepta y re-envía)</option>
+    </select>
+
+    <div class="btn-row">
+        <button onclick="runBB84()">▶ EJECUTAR PROTOCOLO BB84</button>
+        <button onclick="document.getElementById('output').innerHTML=''">LIMPIAR</button>
+    </div>
+
+    <div id="output"></div>
+
+    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; VOLVER AL NIDO</a>
+</div>
+
+<script>
+const BASES = ['+', '×']; // Rectilinear, Diagonal
+const STATES = {
+    '+': { 0: { symbol: '↑', cls: 'q-v', label: '|0⟩' }, 1: { symbol: '→', cls: 'q-h', label: '|1⟩' } },
+    '×': { 0: { symbol: '↗', cls: 'q-d', label: '|+⟩' }, 1: { symbol: '↘', cls: 'q-a', label: '|−⟩' } }
+};
+
+function rBit() { return crypto.getRandomValues(new Uint8Array(1))[0] & 1; }
+function rBase() { return BASES[rBit()]; }
+
+function runBB84() {
+    const n = parseInt(document.getElementById('n-qubits').value);
+    const eveMode = document.getElementById('eve-mode').value === 'yes';
+    const out = document.getElementById('output');
+    out.innerHTML = '';
+
+    // Step 1: Alice prepares random bits and bases
+    const aliceBits = [], aliceBases = [];
+    for (let i = 0; i < n; i++) { aliceBits.push(rBit()); aliceBases.push(rBase()); }
+
+    // Step 2: Eve intercepts (if enabled)
+    let eveBases = [], eveMeasured = [];
+    if (eveMode) {
+        for (let i = 0; i < n; i++) {
+            eveBases.push(rBase());
+            // If Eve's basis matches Alice's, she gets the correct bit; otherwise random
+            eveMeasured.push(eveBases[i] === aliceBases[i] ? aliceBits[i] : rBit());
+        }
+    }
+
+    // Step 3: Bob chooses random bases and measures
+    const bobBases = [], bobMeasured = [];
+    for (let i = 0; i < n; i++) {
+        bobBases.push(rBase());
+        if (eveMode) {
+            // Bob measures Eve's re-sent qubits
+            bobMeasured.push(bobBases[i] === eveBases[i] ? eveMeasured[i] : rBit());
+        } else {
+            // Bob measures Alice's qubits directly
+            bobMeasured.push(bobBases[i] === aliceBases[i] ? aliceBits[i] : rBit());
+        }
+    }
+
+    // Step 4: Sifting — keep only where bases match
+    const siftedAlice = [], siftedBob = [], matchIndices = [];
+    for (let i = 0; i < n; i++) {
+        if (aliceBases[i] === bobBases[i]) {
+            siftedAlice.push(aliceBits[i]);
+            siftedBob.push(bobMeasured[i]);
+            matchIndices.push(i);
+        }
+    }
+
+    // Step 5: Error rate check
+    let errors = 0;
+    for (let i = 0; i < siftedAlice.length; i++) if (siftedAlice[i] !== siftedBob[i]) errors++;
+    const errorRate = siftedAlice.length > 0 ? (errors / siftedAlice.length * 100).toFixed(1) : 0;
+
+    // Build table
+    let html = '<div class="protocol-view"><table><tr><th>#</th><th>ALICE BIT</th><th>ALICE BASE</th><th>QUBIT</th>';
+    if (eveMode) html += '<th>EVE BASE</th><th>EVE BIT</th>';
+    html += '<th>BOB BASE</th><th>BOB BIT</th><th>MATCH?</th></tr>';
+
+    for (let i = 0; i < n; i++) {
+        const st = STATES[aliceBases[i]][aliceBits[i]];
+        const bMatch = aliceBases[i] === bobBases[i];
+        const bitMatch = bMatch && aliceBits[i] === bobMeasured[i];
+        html += `<tr class="${bMatch ? 'basis-match' : ''}">`;
+        html += `<td>${i + 1}</td>`;
+        html += `<td>${aliceBits[i]}</td>`;
+        html += `<td>${aliceBases[i]}</td>`;
+        html += `<td class="qubit ${st.cls}">${st.symbol}</td>`;
+        if (eveMode) html += `<td>${eveBases[i]}</td><td>${eveMeasured[i]}</td>`;
+        html += `<td>${bobBases[i]}</td>`;
+        html += `<td>${bobMeasured[i]}</td>`;
+        html += `<td class="${bMatch ? (bitMatch ? 'match' : 'nomatch') : ''}">${bMatch ? (bitMatch ? '✅' : '❌') : '—'}</td>`;
+        html += '</tr>';
+    }
+    html += '</table></div>';
+
+    // Results
+    html += '<div class="section">';
+    html += `<div class="stat">Qubits enviados: ${n} | Bases coincidentes: ${siftedAlice.length} (${(siftedAlice.length / n * 100).toFixed(0)}%) | Descartados: ${n - siftedAlice.length}</div>`;
+
+    if (eveMode && errorRate > 15) {
+        html += `<div class="eve-alert"><h3>⚠️ ESPÍA DETECTADO</h3>
+            <p>Tasa de error: <strong>${errorRate}%</strong> (umbral seguro: &lt;11%)</p>
+            <p>El protocolo BB84 detectó manipulación cuántica en el canal. Eve perturbó los estados cuánticos al medirlos, introduciendo errores detectables. La llave está comprometida.</p>
+        </div>`;
+    } else {
+        const finalKey = siftedAlice.join('');
+        const hexKey = parseInt(finalKey || '0', 2).toString(16).padStart(Math.ceil(finalKey.length / 4), '0');
+        html += `<div class="key-box">
+            <div style="font-family:'Press Start 2P',cursive;font-size:.6em;color:var(--grn);margin-bottom:10px">🔐 LLAVE CUÁNTICA COMPARTIDA:</div>
+            <div class="val">${finalKey}</div>
+            <div class="stat" style="margin-top:10px">HEX: ${hexKey} | Longitud: ${finalKey.length} bits | Tasa de error: ${errorRate}%</div>
+        </div>`;
+    }
+
+    html += `<div class="stat">
+        <strong>¿Cómo funciona?</strong><br>
+        1. Alice elige bits y bases aleatorias (+/×) y envía qubits polarizados.<br>
+        2. Bob mide cada qubit con una base aleatoria propia.<br>
+        3. Comparan bases públicamente (no bits). Conservan solo los bits donde ambos usaron LA MISMA base.<br>
+        4. Si un espía (Eve) interceptó los qubits, introdujo errores detectables al colapsar los estados cuánticos.
+    </div>`;
+    html += '</div>';
+
+    out.innerHTML = html;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Zero-Day Tensor Exploit Kit v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#000; --red:#ff0000; --dk:#660000; --txt:#ddd; --cyan:#0ff; }
+        * { box-sizing:border-box; }
+        body { background:var(--bg); color:var(--txt); font-family:'Share Tech Mono',monospace; padding:20px; margin:0; display:flex; flex-direction:column; align-items:center; }
+        .box { border:2px dashed var(--red); padding:30px; margin-top:3vh; width:95%; max-width:900px; }
+        h1 { font-family:'Press Start 2P',cursive; color:var(--red); font-size:0.95em; text-align:left; border-bottom:2px solid var(--dk); padding-bottom:12px; }
+        .tabs { display:flex; gap:0; margin-bottom:20px; }
+        .tab { padding:10px 15px; background:#111; border:1px solid var(--dk); color:#888; cursor:pointer; font-family:'Press Start 2P',cursive; font-size:0.55em; }
+        .tab.active { background:var(--dk); color:#fff; border-color:var(--red); }
+        .panel { display:none; }
+        .panel.active { display:block; }
+        input,select,textarea { width:100%; background:#050000; border:1px solid var(--dk); color:#fff; font-family:'Share Tech Mono',monospace; font-size:1em; padding:10px; outline:none; margin-bottom:12px; }
+        textarea { height:100px; resize:vertical; }
+        label { font-family:'Press Start 2P',cursive; font-size:0.55em; color:var(--red); display:block; margin-bottom:5px; margin-top:8px; }
+        .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+        button { padding:10px 18px; background:var(--dk); border:1px solid var(--red); color:#fff; cursor:pointer; font-family:'Press Start 2P',cursive; font-size:0.6em; }
+        button:hover { background:var(--red); color:#000; }
+        button:disabled { background:#222; border-color:#444; color:#666; }
+        .terminal { background:#050000; border:1px solid var(--dk); padding:15px; height:250px; overflow-y:auto; }
+        .terminal p { margin:3px 0; }
+        .found { color:#0f0; font-weight:bold; }
+        .progress { width:100%; height:12px; background:#111; border:1px solid #333; margin:8px 0; }
+        .fill { height:100%; background:var(--red); transition:width 0.05s; }
+        .stats { display:flex; justify-content:space-between; color:#888; font-size:0.85em; flex-wrap:wrap; gap:5px; }
+        .back { margin-top:20px; display:inline-block; color:#888; text-decoration:none; font-family:'Press Start 2P',cursive; font-size:0.5em; border-bottom:1px solid #888; text-align:center; width:100%; }
+        .back:hover { color:var(--red); }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>[ ZERO-DAY TENSOR EXPLOIT KIT v2.0 ]</h1>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(0)">DICCIONARIO</div>
+        <div class="tab" onclick="switchTab(1)">FUERZA BRUTA</div>
+        <div class="tab" onclick="switchTab(2)">MUTACIONES</div>
+    </div>
+
+    <!-- TAB 0: Dictionary Attack -->
+    <div class="panel active" id="p0">
+        <label>HASH OBJETIVO:</label>
+        <input type="text" id="d-hash" placeholder="SHA-256 / SHA-512 / SHA-1 hash">
+        <label>ALGORITMO:</label>
+        <select id="d-algo"><option value="SHA-256">SHA-256</option><option value="SHA-512">SHA-512</option><option value="SHA-1">SHA-1</option></select>
+        <label>DICCIONARIO (una palabra por línea):</label>
+        <textarea id="d-words">password
+123456
+password123
+qwerty
+letmein
+admin
+test
+monkey
+dragon
+master
+hello
+welcome
+shadow
+superman
+iloveyou
+trustno1
+passw0rd
+abc123
+Clau123
+Sao123
+Dark123
+Stellar123</textarea>
+        <div class="btn-row">
+            <button id="d-btn" onclick="dictAttack()">INICIAR ATAQUE</button>
+            <button onclick="cancelCrack()">DETENER</button>
+        </div>
+    </div>
+
+    <!-- TAB 1: Brute Force -->
+    <div class="panel" id="p1">
+        <label>HASH OBJETIVO:</label>
+        <input type="text" id="b-hash" placeholder="SHA-256 hash a crackear">
+        <label>ALGORITMO:</label>
+        <select id="b-algo"><option value="SHA-256">SHA-256</option><option value="SHA-1">SHA-1</option></select>
+        <label>CHARSET:</label>
+        <select id="b-charset">
+            <option value="num">Solo Números (0-9)</option>
+            <option value="lower">Minúsculas (a-z)</option>
+            <option value="alnum">Alfanumérico (a-z, 0-9)</option>
+            <option value="full">Completo (a-z, A-Z, 0-9)</option>
+        </select>
+        <div style="display:flex;gap:8px">
+            <div style="flex:1"><label>LONGITUD MÍNIMA:</label><input type="number" id="b-min" value="1" min="1" max="6"></div>
+            <div style="flex:1"><label>LONGITUD MÁXIMA:</label><input type="number" id="b-max" value="4" min="1" max="6"></div>
+        </div>
+        <div class="btn-row">
+            <button id="b-btn" onclick="bruteAttack()">INICIAR FUERZA BRUTA</button>
+            <button onclick="cancelCrack()">DETENER</button>
+        </div>
+    </div>
+
+    <!-- TAB 2: Mutations -->
+    <div class="panel" id="p2">
+        <label>HASH OBJETIVO:</label>
+        <input type="text" id="m-hash" placeholder="SHA-256 hash">
+        <label>PALABRA BASE:</label>
+        <input type="text" id="m-word" placeholder="Ej: password" value="password">
+        <label>ALGORITMO:</label>
+        <select id="m-algo"><option value="SHA-256">SHA-256</option><option value="SHA-512">SHA-512</option><option value="SHA-1">SHA-1</option></select>
+        <p style="font-size:0.9em;color:#aaa">Genera mutaciones automáticas: MAYÚSCULAS, capitalización, leet speak (a→4, e→3, o→0, s→5), sufijos numéricos (1-999), y combinaciones.</p>
+        <div class="btn-row">
+            <button id="m-btn" onclick="mutationAttack()">ATACAR CON MUTACIONES</button>
+            <button onclick="cancelCrack()">DETENER</button>
+        </div>
+    </div>
+
+    <div class="progress"><div class="fill" id="prg"></div></div>
+    <div class="stats">
+        <span id="st-tried">0 intentos</span>
+        <span id="st-speed">0 h/s</span>
+        <span id="st-eta">ETA: --</span>
+    </div>
+    <div class="terminal" id="out"><p>> Selecciona un modo de ataque.</p></div>
+
+    <a href="javascript:window.location.href='/' + window.location.search" class="back">&lt;&lt; VOLVER AL NIDO</a>
+</div>
+
+<script>
+let cracking=false;
+function switchTab(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n))}
+function cancelCrack(){cracking=false}
+function log(s,c){const o=document.getElementById('out');const p=document.createElement('p');p.innerHTML=s;if(c)p.className=c;o.appendChild(p);o.scrollTop=o.scrollHeight}
+async function h(algo,s){const b=await crypto.subtle.digest(algo,new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+
+function updateStats(tried,total,t0){
+    const elapsed=(performance.now()-t0)/1000;
+    const speed=(tried/elapsed).toFixed(0);
+    const eta=total>0?((total-tried)/Math.max(speed,1)).toFixed(0):'?';
+    document.getElementById('st-tried').textContent=`${tried.toLocaleString()} intentos`;
+    document.getElementById('st-speed').textContent=`${Number(speed).toLocaleString()} h/s`;
+    document.getElementById('st-eta').textContent=`ETA: ${eta}s`;
+    if(total>0)document.getElementById('prg').style.width=(tried/total*100)+'%';
+}
+
+// Dictionary attack
+async function dictAttack(){
+    const target=document.getElementById('d-hash').value.toLowerCase().trim();
+    const algo=document.getElementById('d-algo').value;
+    const words=document.getElementById('d-words').value.split('\n').map(w=>w.trim()).filter(Boolean);
+    if(!target||!words.length)return alert('Hash y diccionario requeridos');
+    cracking=true;document.getElementById('d-btn').disabled=true;
+    document.getElementById('out').innerHTML='';document.getElementById('prg').style.width='0%';
+    log(`> Objetivo: ${target.substring(0,40)}...`);log(`> Palabras: ${words.length}`);
+    const t0=performance.now();
+    const BATCH=20;
+    for(let i=0;i<words.length&&cracking;i++){
+        const w=words[i],hh=await h(algo,w);
+        if(i%BATCH===0){updateStats(i,words.length,t0);log(`>> [${i}] ${w}`);await new Promise(r=>setTimeout(r,0))}
+        if(hh===target){log(`<br>⚡ CRACKEADO: "${w}"`,`found`);log(`${algo}: ${hh}`,'found');cracking=false;document.getElementById('d-btn').disabled=false;return}
+    }
+    if(cracking)log('> Diccionario agotado. No encontrado.');
+    cracking=false;document.getElementById('d-btn').disabled=false;
+}
+
+// Brute force
+async function bruteAttack(){
+    const target=document.getElementById('b-hash').value.toLowerCase().trim();
+    const algo=document.getElementById('b-algo').value;
+    const charsets={num:'0123456789',lower:'abcdefghijklmnopqrstuvwxyz',alnum:'abcdefghijklmnopqrstuvwxyz0123456789',full:'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'};
+    const cs=charsets[document.getElementById('b-charset').value];
+    const minLen=parseInt(document.getElementById('b-min').value),maxLen=parseInt(document.getElementById('b-max').value);
+    if(!target)return alert('Hash requerido');
+    let total=0;for(let l=minLen;l<=maxLen;l++)total+=Math.pow(cs.length,l);
+    cracking=true;document.getElementById('b-btn').disabled=true;
+    document.getElementById('out').innerHTML='';document.getElementById('prg').style.width='0%';
+    log(`> Charset: ${cs.length} chars | Lengths: ${minLen}-${maxLen} | Combinaciones: ${total.toLocaleString()}`);
+    const t0=performance.now();let tried=0;
+    for(let len=minLen;len<=maxLen&&cracking;len++){
+        const indices=new Array(len).fill(0);
+        while(cracking){
+            const word=indices.map(i=>cs[i]).join('');
+            const hh=await h(algo,word);tried++;
+            if(tried%500===0){updateStats(tried,total,t0);log(`>> [${tried}] ${word}`);await new Promise(r=>setTimeout(r,0))}
+            if(hh===target){updateStats(tried,total,t0);log(`<br>⚡ CRACKEADO POR FUERZA BRUTA: "${word}"`,`found`);log(`${algo}: ${hh}`,'found');cracking=false;document.getElementById('b-btn').disabled=false;return}
+            let carry=true;for(let p=len-1;p>=0&&carry;p--){indices[p]++;if(indices[p]<cs.length)carry=false;else indices[p]=0}
+            if(carry)break;
+        }
+    }
+    if(cracking){updateStats(tried,total,t0);log('> Espacio agotado. No encontrado.')}
+    cracking=false;document.getElementById('b-btn').disabled=false;
+}
+
+// Mutation attack
+async function mutationAttack(){
+    const target=document.getElementById('m-hash').value.toLowerCase().trim();
+    const base=document.getElementById('m-word').value.trim();
+    const algo=document.getElementById('m-algo').value;
+    if(!target||!base)return alert('Hash y palabra base requeridos');
+    cracking=true;document.getElementById('m-btn').disabled=true;
+    document.getElementById('out').innerHTML='';document.getElementById('prg').style.width='0%';
+    
+    // Generate mutations
+    const muts=new Set();
+    muts.add(base);muts.add(base.toLowerCase());muts.add(base.toUpperCase());
+    muts.add(base[0].toUpperCase()+base.slice(1));
+    // Leet speak
+    const leet=s=>s.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5').replace(/t/gi,'7');
+    muts.add(leet(base));muts.add(leet(base.toLowerCase()));muts.add(leet(base.toUpperCase()));
+    // Suffixes
+    for(let i=0;i<=999;i++){muts.add(base+i);muts.add(base.toLowerCase()+i);muts.add(base[0].toUpperCase()+base.slice(1)+i);muts.add(leet(base)+i)}
+    // Prefixes
+    for(let i=0;i<=99;i++){muts.add(i+base);muts.add(i+base.toLowerCase())}
+    // Reversed
+    const rev=s=>[...s].reverse().join('');
+    muts.add(rev(base));muts.add(rev(base)+base);
+    // Doubled
+    muts.add(base+base);muts.add(base+'!');muts.add(base+'@');muts.add(base+'#');muts.add(base+'$');
+    
+    const words=[...muts];
+    log(`> Palabra base: "${base}" | Mutaciones generadas: ${words.length.toLocaleString()}`);
+    const t0=performance.now();const BATCH=50;
+    for(let i=0;i<words.length&&cracking;i++){
+        const w=words[i],hh=await h(algo,w);
+        if(i%BATCH===0){updateStats(i,words.length,t0);log(`>> [${i}] ${w}`);await new Promise(r=>setTimeout(r,0))}
+        if(hh===target){updateStats(i,words.length,t0);log(`<br>⚡ MUTACIÓN ENCONTRADA: "${w}"`,`found`);log(`${algo}: ${hh}`,'found');cracking=false;document.getElementById('m-btn').disabled=false;return}
+    }
+    if(cracking){updateStats(words.length,words.length,t0);log('> Mutaciones agotadas. No encontrado.')}
+    cracking=false;document.getElementById('m-btn').disabled=false;
+}
+</script>
+</body>
+</html>

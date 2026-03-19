@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum Cipher Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#000;--red:#f00;--dk:#600;--txt:#ddd;--cyan:#0ff;--grn:#0f0}
+        *{box-sizing:border-box}
+        body{background:var(--bg);color:var(--txt);font-family:'Share Tech Mono',monospace;padding:20px;margin:0;display:flex;flex-direction:column;align-items:center}
+        .box{border:2px solid var(--dk);padding:30px;margin-top:3vh;width:95%;max-width:900px}
+        h1{font-family:'Press Start 2P',cursive;color:var(--red);font-size:.85em;text-align:center;border-bottom:2px solid var(--dk);padding-bottom:12px;margin-top:0}
+        .q-badge{text-align:center;padding:8px;background:#0a0000;border:1px dashed var(--dk);margin-bottom:15px;font-size:.8em;color:#f55}
+        .q-badge .src{color:var(--grn);font-weight:bold}
+        .tabs{display:flex;gap:0;margin-bottom:20px;flex-wrap:wrap}
+        .tab{padding:10px 12px;background:#111;border:1px solid var(--dk);color:#888;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:.45em}
+        .tab.active{background:var(--dk);color:#fff;border-color:var(--red)}
+        .panel{display:none}.panel.active{display:block}
+        textarea,input,select{width:100%;background:#050000;border:1px solid var(--dk);color:#fff;font-family:'Share Tech Mono',monospace;font-size:1em;padding:10px;outline:none;margin-bottom:12px;resize:vertical}
+        textarea{height:90px}
+        label{font-family:'Press Start 2P',cursive;font-size:.5em;color:var(--red);display:block;margin-bottom:5px;margin-top:8px}
+        .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+        button{padding:10px 16px;background:var(--dk);border:1px solid var(--red);color:#fff;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:.55em}
+        button:hover{background:var(--red);color:#000}
+        button:disabled{background:#222;border-color:#444;color:#666}
+        .out{background:#050000;border:1px solid var(--red);padding:15px;min-height:80px;word-break:break-all;line-height:1.5;margin-top:10px}
+        .val{color:var(--cyan);font-size:.9em}
+        .stat{color:#888;font-size:.85em;margin-top:8px}
+        .key-box{background:#0a0000;border:1px dashed var(--dk);padding:10px;margin:8px 0;color:#ff0;word-break:break-all;font-size:.8em;max-height:120px;overflow-y:auto}
+        .pq-tag{display:inline-block;background:#300;color:#f55;padding:3px 8px;font-size:.7em;border:1px solid var(--red);margin-left:5px}
+        .back{margin-top:20px;display:inline-block;color:#888;text-decoration:none;font-family:'Press Start 2P',cursive;font-size:.5em;border-bottom:1px solid #888;text-align:center;width:100%}
+        .back:hover{color:var(--red)}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>[ QUANTUM CIPHER SUITE ]</h1>
+    <div class="q-badge">🔬 Entropía: <span class="src" id="entropy-src">Conectando a Cirq...</span> | Fuente: Hadamard Collapse</div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="sw(0)">AES-256-GCM</div>
+        <div class="tab" onclick="sw(1)">DESCIFRAR AES</div>
+        <div class="tab" onclick="sw(2)">POST-QUANTUM <span class="pq-tag">LWE-256</span></div>
+        <div class="tab" onclick="sw(3)">PQ DESCIFRAR</div>
+        <div class="tab" onclick="sw(4)">LLAVES</div>
+    </div>
+
+    <!-- AES Encrypt -->
+    <div class="panel active" id="p0">
+        <label>TEXTO PLANO:</label>
+        <textarea id="enc-txt" placeholder="Mensaje secreto a cifrar con AES-256-GCM..."></textarea>
+        <label>CONTRASEÑA DE CIFRADO:</label>
+        <input type="password" id="enc-pass" placeholder="Contraseña para derivar la llave AES">
+        <div class="btn-row">
+            <button onclick="doEncrypt()">🔒 CIFRAR AES-256-GCM (Cirq Entropy)</button>
+            <button onclick="copyEl('enc-out')">COPIAR</button>
+        </div>
+        <div class="out" id="enc-out"><span style="color:#555">> Salt e IV generados con entropía cuántica de Cirq.</span></div>
+    </div>
+
+    <!-- AES Decrypt -->
+    <div class="panel" id="p1">
+        <label>TEXTO CIFRADO (Base64):</label>
+        <textarea id="dec-txt" placeholder="Pega el texto cifrado..."></textarea>
+        <label>CONTRASEÑA:</label>
+        <input type="password" id="dec-pass" placeholder="Contraseña original">
+        <div class="btn-row">
+            <button onclick="doDecrypt()">🔓 DESCIFRAR</button>
+        </div>
+        <div class="out" id="dec-out"><span style="color:#555">> Pega el ciphertext AES-256 y la contraseña.</span></div>
+    </div>
+
+    <!-- Post-Quantum Encrypt -->
+    <div class="panel" id="p2">
+        <p style="color:#f55;font-size:.85em">Cifrado post-cuántico basado en <strong>Learning With Errors (LWE-256)</strong>, la misma familia matemática de <strong>CRYSTALS-Kyber</strong> (estándar NIST 2024). Resistente a ataques de computadoras cuánticas.</p>
+        <label>MENSAJE A CIFRAR:</label>
+        <textarea id="pq-msg" placeholder="Texto a proteger con criptografía post-cuántica..."></textarea>
+        <div class="btn-row">
+            <button onclick="pqEncrypt()" id="pq-enc-btn">🔒 CIFRAR LWE-256 (POST-QUANTUM)</button>
+        </div>
+        <div class="out" id="pq-enc-out"><span style="color:#555">> Genera llaves LWE automáticamente y cifra con retículos de dimensión 256.</span></div>
+    </div>
+
+    <!-- Post-Quantum Decrypt -->
+    <div class="panel" id="p3">
+        <label>LLAVE PRIVADA (JSON):</label>
+        <textarea id="pq-privkey" placeholder='{"s": [...]}'></textarea>
+        <label>CIPHERTEXT (JSON):</label>
+        <textarea id="pq-cipher" placeholder='[{"u": [...], "v": ...}, ...]' style="height:120px"></textarea>
+        <div class="btn-row">
+            <button onclick="pqDecrypt()" id="pq-dec-btn">🔓 DESCIFRAR LWE-256</button>
+        </div>
+        <div class="out" id="pq-dec-out"><span style="color:#555">> Pega la llave privada y el ciphertext LWE.</span></div>
+    </div>
+
+    <!-- Keys -->
+    <div class="panel" id="p4">
+        <p>Genera llaves criptográficas con entropía cuántica de Cirq.</p>
+        <div class="btn-row">
+            <button onclick="genQKey('hex')">LLAVE HEX (Cirq)</button>
+            <button onclick="genQKey('b64')">LLAVE BASE64 (Cirq)</button>
+            <button onclick="genECDH()">PAR ECDH P-256</button>
+            <button onclick="genPQKeys()">PAR LWE-256 (Post-Quantum)</button>
+        </div>
+        <div class="out" id="key-out"><span style="color:#555">> Todas las llaves usan el colapsador cuántico Cirq.</span></div>
+    </div>
+
+    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; VOLVER AL NIDO</a>
+</div>
+
+<script>
+function sw(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n))}
+function b2hex(buf){return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>alert('Copiado'))}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+// Quantum entropy fetch
+async function qEntropy(n=32){
+    try{
+        const r=await fetch(`/api/quantum-random?n=${n}`);const j=await r.json();
+        document.getElementById('entropy-src').textContent=`Cirq ✅ (${j.qubits_used} qubits)`;
+        return j.hex;
+    }catch{
+        document.getElementById('entropy-src').textContent='Fallback (browser)';
+        const arr=new Uint8Array(n);crypto.getRandomValues(arr);return b2hex(arr);
+    }
+}
+
+// Convert hex string to Uint8Array
+function hex2bytes(hex){const arr=new Uint8Array(hex.length/2);for(let i=0;i<hex.length;i+=2)arr[i/2]=parseInt(hex.substr(i,2),16);return arr}
+
+// Init — test quantum connection
+qEntropy(4);
+
+// AES-256-GCM with Cirq entropy for salt+IV
+async function deriveKey(pass,salt){
+    const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+
+async function doEncrypt(){
+    const txt=document.getElementById('enc-txt').value,pass=document.getElementById('enc-pass').value;
+    if(!txt||!pass)return alert('Texto y contraseña requeridos');
+    const o=document.getElementById('enc-out');
+    o.innerHTML='<span style="color:#ff0">> Obteniendo entropía cuántica de Cirq...</span>';
+    const qHex=await qEntropy(28); // 16 salt + 12 iv
+    const qBytes=hex2bytes(qHex);
+    const salt=qBytes.slice(0,16),iv=qBytes.slice(16,28);
+    o.innerHTML='<span style="color:#ff0">> Derivando llave PBKDF2 (250K iteraciones)...</span>';
+    const key=await deriveKey(pass,salt);
+    const enc=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(txt));
+    const packed=new Uint8Array(28+enc.byteLength);packed.set(salt,0);packed.set(iv,16);packed.set(new Uint8Array(enc),28);
+    const b64=btoa(String.fromCharCode(...packed));
+    o.innerHTML=`
+        <div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">✅ CIFRADO AES-256-GCM (Cirq Entropy):</div>
+        <div class="val" style="margin:10px 0">${b64}</div>
+        <div class="stat">Salt (Cirq): ${b2hex(salt)} | IV (Cirq): ${b2hex(iv)}</div>
+        <div class="stat">PBKDF2: 250,000 iter | Entropía: Hadamard Collapse → ${qHex.length*4} bits cuánticos</div>`;
+}
+
+async function doDecrypt(){
+    const b64=document.getElementById('dec-txt').value.trim(),pass=document.getElementById('dec-pass').value;
+    if(!b64||!pass)return alert('Datos requeridos');const o=document.getElementById('dec-out');
+    try{const packed=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+    const salt=packed.slice(0,16),iv=packed.slice(16,28),ct=packed.slice(28);
+    const key=await deriveKey(pass,salt);
+    const dec=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);
+    o.innerHTML=`<div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">✅ DESCIFRADO:</div><div class="val" style="color:var(--grn);margin:10px 0">${esc(new TextDecoder().decode(dec))}</div>`;
+    }catch{o.innerHTML='<div style="color:#f00">❌ Contraseña incorrecta o datos corrompidos.</div>'}
+}
+
+// Post-Quantum LWE encryption
+let lastPQKeys=null;
+async function pqEncrypt(){
+    const msg=document.getElementById('pq-msg').value;if(!msg)return alert('Mensaje requerido');
+    const o=document.getElementById('pq-enc-out'),btn=document.getElementById('pq-enc-btn');
+    btn.disabled=true;o.innerHTML='<span style="color:#ff0">> Generando par de llaves LWE-256 en el servidor...</span>';
+    try{
+        const kg=await(await fetch('/api/pq-keygen')).json();
+        if(kg.status!=='success')throw new Error(kg.message);
+        lastPQKeys=kg;
+        o.innerHTML='<span style="color:#ff0">> Cifrando con retículo LWE de dimensión 256...</span>';
+        const enc=await(await fetch('/api/pq-encrypt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_key:kg.public_key,message:msg})})).json();
+        if(enc.status!=='success')throw new Error(enc.message);
+
+        const ctStr=JSON.stringify(enc.ciphertext);
+        const pkStr=JSON.stringify(kg.private_key);
+
+        o.innerHTML=`
+            <div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">✅ CIFRADO POST-CUÁNTICO LWE-256:</div>
+            <div class="stat">Algoritmo: Learning With Errors | n=${kg.params.n} | q=${kg.params.q} | σ=${kg.params.sigma}</div>
+            <div class="stat">Bits cifrados: ${enc.bits_encrypted} | Mensaje: ${enc.original_length} bytes</div>
+
+            <div style="color:var(--red);font-family:'Press Start 2P',cursive;font-size:.45em;margin-top:12px">LLAVE PRIVADA (guardar en secreto):</div>
+            <div class="key-box" style="color:#f55">${esc(pkStr).substring(0,200)}...</div>
+
+            <div style="color:var(--red);font-family:'Press Start 2P',cursive;font-size:.45em;margin-top:8px">CIPHERTEXT:</div>
+            <div class="key-box">${esc(ctStr).substring(0,300)}...</div>
+
+            <div class="stat" style="color:#f55">⚠️ La llave privada y el ciphertext ya están copiados en la pestaña "PQ DESCIFRAR" para que puedas probar.</div>`;
+
+        document.getElementById('pq-privkey').value=pkStr;
+        document.getElementById('pq-cipher').value=ctStr;
+    }catch(e){o.innerHTML=`<div style="color:#f00">❌ Error: ${esc(e.message)}</div>`}
+    btn.disabled=false;
+}
+
+async function pqDecrypt(){
+    const o=document.getElementById('pq-dec-out'),btn=document.getElementById('pq-dec-btn');
+    try{
+        const pk=JSON.parse(document.getElementById('pq-privkey').value);
+        const ct=JSON.parse(document.getElementById('pq-cipher').value);
+        btn.disabled=true;o.innerHTML='<span style="color:#ff0">> Descifrando retículo LWE-256...</span>';
+        const dec=await(await fetch('/api/pq-decrypt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({private_key:pk,ciphertext:ct})})).json();
+        if(dec.status!=='success')throw new Error(dec.message);
+        o.innerHTML=`<div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">✅ DESCIFRADO POST-CUÁNTICO:</div><div class="val" style="color:var(--grn);margin:10px 0;font-size:1.1em">${esc(dec.message)}</div><div class="stat">Bits descifrados: ${dec.bits_decrypted}</div>`;
+    }catch(e){o.innerHTML=`<div style="color:#f00">❌ Error: ${esc(e.message||'JSON inválido')}</div>`}
+    btn.disabled=false;
+}
+
+// Key generation with Cirq
+async function genQKey(fmt){
+    const o=document.getElementById('key-out');o.innerHTML='<span style="color:#ff0">> Solicitando entropía cuántica a Cirq...</span>';
+    const hex=await qEntropy(32);
+    const b64=btoa(String.fromCharCode(...hex2bytes(hex)));
+    o.innerHTML=`<div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">LLAVE AES-256 (Cirq Quantum):</div><div class="key-box">${fmt==='hex'?hex:b64}</div><div class="stat">256 bits | Fuente: Hadamard Collapse (cirq.H)</div>`;
+}
+
+async function genECDH(){
+    const o=document.getElementById('key-out');o.innerHTML='<span style="color:#ff0">> Generando ECDH P-256...</span>';
+    const kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveKey']);
+    const pub=await crypto.subtle.exportKey('jwk',kp.publicKey);
+    const priv=await crypto.subtle.exportKey('jwk',kp.privateKey);
+    o.innerHTML=`<div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">PAR ECDH P-256:</div>
+        <div class="key-box">PUB x: ${pub.x}\nPUB y: ${pub.y}</div>
+        <div class="key-box" style="color:#f55">PRIV d: ${priv.d}</div>`;
+}
+
+async function genPQKeys(){
+    const o=document.getElementById('key-out');o.innerHTML='<span style="color:#ff0">> Generando par LWE-256 post-cuántico...</span>';
+    try{const r=await(await fetch('/api/pq-keygen')).json();
+    o.innerHTML=`<div style="color:var(--grn);font-family:'Press Start 2P',cursive;font-size:.5em">PAR LWE-256 (POST-QUANTUM):</div>
+        <div class="stat">n=${r.params.n} | q=${r.params.q} | σ=${r.params.sigma} | ${r.algorithm}</div>
+        <div style="color:var(--red);font-size:.5em;font-family:'Press Start 2P',cursive;margin-top:8px">LLAVE PÚBLICA (b vector, ${r.public_key.b.length} elementos):</div>
+        <div class="key-box">[${r.public_key.b.slice(0,20).join(', ')}...]</div>
+        <div style="color:var(--red);font-size:.5em;font-family:'Press Start 2P',cursive">LLAVE PRIVADA (s vector):</div>
+        <div class="key-box" style="color:#f55">[${r.private_key.s.slice(0,20).join(', ')}...]</div>`;
+    }catch(e){o.innerHTML=`<div style="color:#f00">❌ ${e.message}</div>`}
+}
+</script>
+</body>
+</html>
