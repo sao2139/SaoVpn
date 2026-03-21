@@ -36,25 +36,25 @@
 <body>
 <div class="box">
     <h1>[ QKD SIMULATOR — BB84 ]</h1>
-    <p>Simulador del protocolo BB84 de distribución cuántica de llaves. Dos partes (Alice y Bob) generan una llave secreta compartida que es imposible de interceptar sin dejar rastro.</p>
+    <p>Simulator for the BB84 quantum key distribution protocol. Two parties (Alice and Bob) generate a shared secret key that is impossible to intercept without leaving a trace.</p>
 
-    <label>NÚMERO DE QUBITS:</label>
+    <label>NUMBER OF QUBITS:</label>
     <input type="number" id="n-qubits" value="20" min="8" max="64">
 
-    <label>SIMULAR ESPÍA (EVE):</label>
+    <label>SIMULATE SPY (EVE):</label>
     <select id="eve-mode">
-        <option value="no">Sin espía — Canal cuántico seguro</option>
-        <option value="yes">Con espía (EVE intercepta y re-envía)</option>
+        <option value="no">No spy — Secure quantum channel</option>
+        <option value="yes">With spy (EVE intercepts and resends)</option>
     </select>
 
     <div class="btn-row">
-        <button onclick="runBB84()">▶ EJECUTAR PROTOCOLO BB84</button>
-        <button onclick="document.getElementById('output').innerHTML=''">LIMPIAR</button>
+        <button onclick="runBB84()">▶ RUN BB84 PROTOCOL</button>
+        <button onclick="document.getElementById('output').innerHTML=''">CLEAR</button>
     </div>
 
     <div id="output"></div>
 
-    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; VOLVER AL NIDO</a>
+    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; RETURN TO NEST</a>
 </div>
 
 <script>
@@ -116,9 +116,9 @@ function runBB84() {
     const errorRate = siftedAlice.length > 0 ? (errors / siftedAlice.length * 100).toFixed(1) : 0;
 
     // Build table
-    let html = '<div class="protocol-view"><table><tr><th>#</th><th>ALICE BIT</th><th>ALICE BASE</th><th>QUBIT</th>';
-    if (eveMode) html += '<th>EVE BASE</th><th>EVE BIT</th>';
-    html += '<th>BOB BASE</th><th>BOB BIT</th><th>MATCH?</th></tr>';
+    let html = '<div class="protocol-view"><table><tr><th>#</th><th>ALICE BIT</th><th>ALICE BASIS</th><th>QUBIT</th>';
+    if (eveMode) html += '<th>EVE BASIS</th><th>EVE BIT</th>';
+    html += '<th>BOB BASIS</th><th>BOB BIT</th><th>MATCH?</th></tr>';
 
     for (let i = 0; i < n; i++) {
         const st = STATES[aliceBases[i]][aliceBits[i]];
@@ -139,29 +139,29 @@ function runBB84() {
 
     // Results
     html += '<div class="section">';
-    html += `<div class="stat">Qubits enviados: ${n} | Bases coincidentes: ${siftedAlice.length} (${(siftedAlice.length / n * 100).toFixed(0)}%) | Descartados: ${n - siftedAlice.length}</div>`;
+    html += `<div class="stat">Qubits sent: ${n} | Matching bases: ${siftedAlice.length} (${(siftedAlice.length / n * 100).toFixed(0)}%) | Discarded: ${n - siftedAlice.length}</div>`;
 
     if (eveMode && errorRate > 15) {
-        html += `<div class="eve-alert"><h3>⚠️ ESPÍA DETECTADO</h3>
-            <p>Tasa de error: <strong>${errorRate}%</strong> (umbral seguro: &lt;11%)</p>
-            <p>El protocolo BB84 detectó manipulación cuántica en el canal. Eve perturbó los estados cuánticos al medirlos, introduciendo errores detectables. La llave está comprometida.</p>
+        html += `<div class="eve-alert"><h3>⚠️ SPY DETECTADO</h3>
+            <p>Error rate: <strong>${errorRate}%</strong> (safe threshold: &lt;11%)</p>
+            <p>The BB84 protocol detected quantum manipulation on the channel. Eve disturbed the quantum states by measuring them, introducing detectable errors. The key is compromised.</p>
         </div>`;
     } else {
         const finalKey = siftedAlice.join('');
         const hexKey = parseInt(finalKey || '0', 2).toString(16).padStart(Math.ceil(finalKey.length / 4), '0');
         html += `<div class="key-box">
-            <div style="font-family:'Press Start 2P',cursive;font-size:.6em;color:var(--grn);margin-bottom:10px">🔐 LLAVE CUÁNTICA COMPARTIDA:</div>
+            <div style="font-family:'Press Start 2P',cursive;font-size:.6em;color:var(--grn);margin-bottom:10px">🔐 SHARED QUANTUM KEY:</div>
             <div class="val">${finalKey}</div>
-            <div class="stat" style="margin-top:10px">HEX: ${hexKey} | Longitud: ${finalKey.length} bits | Tasa de error: ${errorRate}%</div>
+            <div class="stat" style="margin-top:10px">HEX: ${hexKey} | Length: ${finalKey.length} bits | Error rate: ${errorRate}%</div>
         </div>`;
     }
 
     html += `<div class="stat">
-        <strong>¿Cómo funciona?</strong><br>
-        1. Alice elige bits y bases aleatorias (+/×) y envía qubits polarizados.<br>
-        2. Bob mide cada qubit con una base aleatoria propia.<br>
-        3. Comparan bases públicamente (no bits). Conservan solo los bits donde ambos usaron LA MISMA base.<br>
-        4. Si un espía (Eve) interceptó los qubits, introdujo errores detectables al colapsar los estados cuánticos.
+        <strong>How does it work?</strong><br>
+        1. Alice chooses random bits and bases (+/×) and sends polarized qubits.<br>
+        2. Bob measures each qubit with his own random basis.<br>
+        3. They publicly compare bases (not bits). They only keep the bits where both used the SAME basis.<br>
+        4. If a spy (Eve) intercepted the qubits, they introduced detectable errors by collapsing the quantum states.
     </div>`;
     html += '</div>';
 

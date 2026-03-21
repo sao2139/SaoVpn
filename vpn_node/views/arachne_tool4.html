@@ -35,77 +35,77 @@
 <body>
 <div class="box">
     <h1>[ QUANTUM CIPHER SUITE ]</h1>
-    <div class="q-badge">🔬 Entropía: <span class="src" id="entropy-src">Conectando a Cirq...</span> | Fuente: Hadamard Collapse</div>
+    <div class="q-badge">🔬 Entropy: <span class="src" id="entropy-src">Connecting to Cirq...</span> | Source: Hadamard Collapse</div>
 
     <div class="tabs">
         <div class="tab active" onclick="sw(0)">AES-256-GCM</div>
-        <div class="tab" onclick="sw(1)">DESCIFRAR AES</div>
+        <div class="tab" onclick="sw(1)">DECRYPT AES</div>
         <div class="tab" onclick="sw(2)">POST-QUANTUM <span class="pq-tag">LWE-256</span></div>
-        <div class="tab" onclick="sw(3)">PQ DESCIFRAR</div>
-        <div class="tab" onclick="sw(4)">LLAVES</div>
+        <div class="tab" onclick="sw(3)">PQ DECRYPT</div>
+        <div class="tab" onclick="sw(4)">KEYS</div>
     </div>
 
     <!-- AES Encrypt -->
     <div class="panel active" id="p0">
-        <label>TEXTO PLANO:</label>
-        <textarea id="enc-txt" placeholder="Mensaje secreto a cifrar con AES-256-GCM..."></textarea>
-        <label>CONTRASEÑA DE CIFRADO:</label>
-        <input type="password" id="enc-pass" placeholder="Contraseña para derivar la llave AES">
+        <label>PLAIN TEXT:</label>
+        <textarea id="enc-txt" placeholder="Secret message to encrypt with AES-256-GCM..."></textarea>
+        <label>ENCRYPTION PASSWORD:</label>
+        <input type="password" id="enc-pass" placeholder="Password to derive the AES key">
         <div class="btn-row">
-            <button onclick="doEncrypt()">🔒 CIFRAR AES-256-GCM (Cirq Entropy)</button>
-            <button onclick="copyEl('enc-out')">COPIAR</button>
+            <button onclick="doEncrypt()">🔒 ENCRYPT AES-256-GCM (Cirq Entropy)</button>
+            <button onclick="copyEl('enc-out')">COPY</button>
         </div>
-        <div class="out" id="enc-out"><span style="color:#555">> Salt e IV generados con entropía cuántica de Cirq.</span></div>
+        <div class="out" id="enc-out"><span style="color:#555">> Salt and IV generated with quantum entropy from Cirq.</span></div>
     </div>
 
     <!-- AES Decrypt -->
     <div class="panel" id="p1">
-        <label>TEXTO CIFRADO (Base64):</label>
-        <textarea id="dec-txt" placeholder="Pega el texto cifrado..."></textarea>
-        <label>CONTRASEÑA:</label>
-        <input type="password" id="dec-pass" placeholder="Contraseña original">
+        <label>CIPHERTEXT (Base64):</label>
+        <textarea id="dec-txt" placeholder="Paste the ciphertext..."></textarea>
+        <label>PASSWORD:</label>
+        <input type="password" id="dec-pass" placeholder="Original password">
         <div class="btn-row">
-            <button onclick="doDecrypt()">🔓 DESCIFRAR</button>
+            <button onclick="doDecrypt()">🔓 DECRYPT</button>
         </div>
-        <div class="out" id="dec-out"><span style="color:#555">> Pega el ciphertext AES-256 y la contraseña.</span></div>
+        <div class="out" id="dec-out"><span style="color:#555">> Paste the AES-256 ciphertext and the password.</span></div>
     </div>
 
     <!-- Post-Quantum Encrypt -->
     <div class="panel" id="p2">
-        <p style="color:#f55;font-size:.85em">Cifrado post-cuántico basado en <strong>Learning With Errors (LWE-256)</strong>, la misma familia matemática de <strong>CRYSTALS-Kyber</strong> (estándar NIST 2024). Resistente a ataques de computadoras cuánticas.</p>
-        <label>MENSAJE A CIFRAR:</label>
-        <textarea id="pq-msg" placeholder="Texto a proteger con criptografía post-cuántica..."></textarea>
+        <p style="color:#f55;font-size:.85em">Post-quantum encryption based on <strong>Learning With Errors (LWE-256)</strong>, the same mathematical family as <strong>CRYSTALS-Kyber</strong> (NIST 2024 standard). Resistant to quantum computer attacks.</p>
+        <label>MESSAGE TO ENCRYPT:</label>
+        <textarea id="pq-msg" placeholder="Text to protect with post-quantum cryptography..."></textarea>
         <div class="btn-row">
-            <button onclick="pqEncrypt()" id="pq-enc-btn">🔒 CIFRAR LWE-256 (POST-QUANTUM)</button>
+            <button onclick="pqEncrypt()" id="pq-enc-btn">🔒 ENCRYPT LWE-256 (POST-QUANTUM)</button>
         </div>
-        <div class="out" id="pq-enc-out"><span style="color:#555">> Genera llaves LWE automáticamente y cifra con retículos de dimensión 256.</span></div>
+        <div class="out" id="pq-enc-out"><span style="color:#555">> Automatically generates LWE keys and encrypts using 256-dimensional lattices.</span></div>
     </div>
 
     <!-- Post-Quantum Decrypt -->
     <div class="panel" id="p3">
-        <label>LLAVE PRIVADA (JSON):</label>
+        <label>PRIVATE KEY (JSON):</label>
         <textarea id="pq-privkey" placeholder='{"s": [...]}'></textarea>
         <label>CIPHERTEXT (JSON):</label>
         <textarea id="pq-cipher" placeholder='[{"u": [...], "v": ...}, ...]' style="height:120px"></textarea>
         <div class="btn-row">
-            <button onclick="pqDecrypt()" id="pq-dec-btn">🔓 DESCIFRAR LWE-256</button>
+            <button onclick="pqDecrypt()" id="pq-dec-btn">🔓 DECRYPT LWE-256</button>
         </div>
-        <div class="out" id="pq-dec-out"><span style="color:#555">> Pega la llave privada y el ciphertext LWE.</span></div>
+        <div class="out" id="pq-dec-out"><span style="color:#555">> Paste the private key and the LWE ciphertext.</span></div>
     </div>
 
     <!-- Keys -->
     <div class="panel" id="p4">
-        <p>Genera llaves criptográficas con entropía cuántica de Cirq.</p>
+        <p>Generates cryptographic keys with quantum entropy from Cirq.</p>
         <div class="btn-row">
-            <button onclick="genQKey('hex')">LLAVE HEX (Cirq)</button>
-            <button onclick="genQKey('b64')">LLAVE BASE64 (Cirq)</button>
-            <button onclick="genECDH()">PAR ECDH P-256</button>
+            <button onclick="genQKey('hex')">HEX KEY (Cirq)</button>
+            <button onclick="genQKey('b64')">BASE64 KEY (Cirq)</button>
+            <button onclick="genECDH()">ECDH P-256 PAIR</button>
             <button onclick="genPQKeys()">PAR LWE-256 (Post-Quantum)</button>
         </div>
-        <div class="out" id="key-out"><span style="color:#555">> Todas las llaves usan el colapsador cuántico Cirq.</span></div>
+        <div class="out" id="key-out"><span style="color:#555">> All keys use the Cirq quantum collapser.</span></div>
     </div>
 
-    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; VOLVER AL NIDO</a>
+    <a href="javascript:window.location.href='/'+window.location.search" class="back">&lt;&lt; RETURN TO NEST</a>
 </div>
 
 <script>

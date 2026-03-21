@@ -204,29 +204,32 @@
 
     <div class="terminal" id="login-screen">
         <h1 class="status-locked">NODE LOCKED</h1>
-        <p class="subtitle">Identificación Requerida</p>
+        <p class="subtitle">Identification Required</p>
         
         <div class="input-group">
-            <input type="text" id="user" placeholder="ID. AGENTE" autocomplete="off">
+            <input type="text" id="user" placeholder="AGENT ID" autocomplete="off">
         </div>
         <div class="input-group">
-            <input type="password" id="pass" placeholder="CLAVE DE DESCIFRADO">
+            <input type="password" id="pass" placeholder="DECRYPTION KEY">
         </div>
         
-        <button onclick="unlockHub()">INICIAR PROTOCOLO</button>
+        <button onclick="unlockHub()">INITIATE PROTOCOL</button>
         <p id="error"></p>
     </div>
 
     <div class="terminal" id="secure-content">
         <h1>CLAU NETWORK</h1>
         <p class="subtitle" id="welcome-msg" style="color: #4caf50;">STATUS: ONLINE</p>
+        <p class="subtitle" style="font-size: 0.85em; text-transform: none; margin-top: -15px; line-height: 1.4; color: #aaa;">
+            Hello user, welcome to the Clau network. Here your identity is encrypted by Post Quantum; no one can enter without my permission. Good luck
+        </p>
         
         <div class="divider"></div>
         
         <div class="link-grid">
-            <a id="btn-liberte" href="#" class="link rojo">ACCESO A LA LIBERTÉ</a>
-            <a id="btn-chat" href="#" class="link">ENTRAR AL CHAT SEGURO</a>
-            <a id="btn-unknown" href="#" class="link" style="opacity: 0.6;">ARCHIVOS UNKNOWN</a>
+            <a id="btn-liberte" href="#" class="link rojo">ACCESS LA LIBERTÉ</a>
+            <a id="btn-chat" href="#" class="link">ENTER SECURE CHAT</a>
+            <a id="btn-unknown" href="#" class="link" style="opacity: 0.6;">UNKNOWN FILES</a>
             <a id="btn-admin" href="#" class="link root" style="display: none;">ROOT CONTROL</a>
         </div>
     </div>
@@ -247,7 +250,7 @@
             const errorMsg = document.getElementById('error');
 
             if (!u || !p) {
-                errorMsg.innerText = ">> FALTAN CREDENCIALES.";
+                errorMsg.innerText = ">> MISSING CREDENTIALS.";
                 return;
             }
 
@@ -255,7 +258,6 @@
                 const response = await fetch(`/api/status?u=${u}&p=${p}`);
                 const data = await response.json();
 
-                // Smooth transition
                 const loginScreen = document.getElementById('login-screen');
                 const secureContent = document.getElementById('secure-content');
                 
@@ -265,7 +267,7 @@
                     loginScreen.style.display = 'none';
                     secureContent.style.display = 'block';
                     
-                    document.getElementById('welcome-msg').innerText = `AGENTE ${u.toUpperCase()} // ACCESO AUTORIZADO`;
+                    document.getElementById('welcome-msg').innerText = `AGENT ${u.toUpperCase()} // ACCESS AUTHORIZED`;
 
                     document.getElementById('btn-liberte').href = data.links.liberte;
                     document.getElementById('btn-chat').href = data.links.chat;
@@ -279,7 +281,7 @@
                 }, 400);
 
             } catch (error) {
-                errorMsg.innerText = ">> ERROR DE CONEXIÓN CON EL NÚCLEO.";
+                errorMsg.innerText = ">> CORE CONNECTION ERROR.";
             }
         }
 

@@ -164,38 +164,37 @@
         </div>
 
         <div class="welcome-text">
-            Bienvenido a la red paralela ARACHNE127. Has logrado cruzar el velo cuántico. <br><br>
-            Aquí, las herramientas transcienden las limitaciones de la web superficial. Teje tus propios hilos y extrae la información del abismo. No hay reglas, solo nodos y probabilidad.
+            Geniuses are geniuses when they aren't consumed by ego; they take good care of their tools and use them responsibly...
         </div>
 
         <div class="tools-container">
             <a href="#" id="link-tool1" class="tool-link">
                 [ QUANTUM ENTROPY INJECTOR v3.0 ]
-                <span class="tool-desc" id="desc-tool1">Hash, PBKDF2, HMAC, archivos, generador y Base64. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool1">Hash, PBKDF2, HMAC, files, generator and Base64. <span class="domain-tag">Loading...</span></span>
             </a>
             <a href="#" id="link-tool2" class="tool-link">
                 [ WAVE-FUNCTION COLLAPSE SCANNER v2.0 ]
-                <span class="tool-desc" id="desc-tool2">Escáner TCP concurrente con fingerprinting y exportación. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool2">Concurrent TCP scanner with fingerprinting and export. <span class="domain-tag">Loading...</span></span>
             </a>
             <a href="#" id="link-tool3" class="tool-link">
                 [ ZERO-DAY TENSOR EXPLOIT KIT v2.0 ]
-                <span class="tool-desc" id="desc-tool3">Cracker por diccionario, fuerza bruta y mutaciones. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool3">Dictionary cracker, brute force and mutations. <span class="domain-tag">Loading...</span></span>
             </a>
             <a href="#" id="link-tool4" class="tool-link">
                 [ QUANTUM CIPHER SUITE ]
-                <span class="tool-desc" id="desc-tool4">Cifrado AES-256-GCM real con PBKDF2 y llaves ECDH P-256. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool4">Real AES-256-GCM cipher with PBKDF2 and ECDH P-256 keys. <span class="domain-tag">Loading...</span></span>
             </a>
             <a href="#" id="link-tool5" class="tool-link">
                 [ STEGANOGRAPHY ENGINE ]
-                <span class="tool-desc" id="desc-tool5">Oculta mensajes dentro de imágenes con codificación LSB. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool5">Hide messages inside images with LSB encoding. <span class="domain-tag">Loading...</span></span>
             </a>
             <a href="#" id="link-tool6" class="tool-link">
                 [ QKD SIMULATOR — BB84 ]
-                <span class="tool-desc" id="desc-tool6">Distribución cuántica de llaves con detección de espías. <span class="domain-tag">Cargando...</span></span>
+                <span class="tool-desc" id="desc-tool6">Quantum key distribution with eavesdropper detection. <span class="domain-tag">Loading...</span></span>
             </a>
         </div>
 
-        <a href="javascript:history.back()" class="back-btn">&lt;&lt; VOLVER</a>
+        <a href="javascript:history.back()" class="back-btn">&lt;&lt; BACK</a>
     </div>
 
     <style>
@@ -227,7 +226,7 @@
         .catch(() => {
             for (let i = 1; i <= 6; i++) {
                 document.getElementById('link-tool' + i).href = `/tool${i}?u=${u}&p=${p}`;
-                document.getElementById('desc-tool' + i).querySelector('.domain-tag').textContent = '>> (enlace local)';
+                document.getElementById('desc-tool' + i).querySelector('.domain-tag').textContent = '>> (local link)';
             }
         });
 </script>

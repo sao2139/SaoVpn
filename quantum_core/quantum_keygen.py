@@ -4,7 +4,6 @@ import json
 import sys
 import numpy as np 
 
-
 def obtener_semilla_hardware():
     return secrets.randbits(32)
 

@@ -36,43 +36,43 @@
 <body>
 <div class="box">
     <h1>[ WAVE-FUNCTION COLLAPSE SCANNER v2.0 ]</h1>
-    <p>Escáner TCP con fingerprinting HTTP, medición de latencia y escaneo concurrente.</p>
+    <p>TCP Scanner with HTTP fingerprinting, latency measurement and concurrent scanning.</p>
 
     <div class="form-row">
         <input type="text" id="host" value="127.0.0.1" placeholder="Host">
-        <input type="number" id="pf" value="1" min="1" max="65535" placeholder="Desde">
-        <input type="number" id="pt" value="1024" min="1" max="65535" placeholder="Hasta">
+        <input type="number" id="pf" value="1" min="1" max="65535" placeholder="From">
+        <input type="number" id="pt" value="1024" min="1" max="65535" placeholder="To">
         <input type="number" id="timeout" value="350" min="50" max="5000" placeholder="Timeout ms">
     </div>
     <div class="form-row">
         <select id="preset">
-            <option value="custom">Rango Personalizado</option>
-            <option value="common">Puertos Comunes (21-443)</option>
+            <option value="custom">Custom Range</option>
+            <option value="common">Common Ports (21-443)</option>
             <option value="web">Web (80,443,8080,3000,5000)</option>
             <option value="db">DB (3306,5432,6379,27017)</option>
             <option value="full">Critical Full (21-9200)</option>
         </select>
-        <input type="number" id="concurrent" value="10" min="1" max="50" placeholder="Concurrencia">
-        <button id="btn" onclick="startScan()">ESCANEAR</button>
-        <button onclick="cancelScan()">DETENER</button>
-        <button onclick="exportResults()">EXPORTAR</button>
+        <input type="number" id="concurrent" value="10" min="1" max="50" placeholder="Concurrency">
+        <button id="btn" onclick="startScan()">SCAN</button>
+        <button onclick="cancelScan()">STOP</button>
+        <button onclick="exportResults()">EXPORT</button>
     </div>
 
     <div class="progress"><div class="fill" id="pbar"></div></div>
     <div class="stats-bar">
         <span id="st-progress">0/0</span>
-        <span id="st-open">Abiertos: 0</span>
-        <span id="st-speed">0 puertos/s</span>
+        <span id="st-open">Open: 0</span>
+        <span id="st-speed">0 ports/s</span>
         <span id="st-eta">ETA: --</span>
     </div>
     <div class="results" id="results"></div>
 
     <div class="summary-box" id="summary" style="display:none">
-        <h3>RESUMEN DEL ESCANEO</h3>
+        <h3>SCAN SUMMARY</h3>
         <div id="summary-content"></div>
     </div>
 
-    <a href="javascript:window.location.href='/' + window.location.search" class="back">&lt;&lt; VOLVER</a>
+    <a href="javascript:window.location.href='/' + window.location.search" class="back">&lt;&lt; BACK</a>
 </div>
 
 <script>

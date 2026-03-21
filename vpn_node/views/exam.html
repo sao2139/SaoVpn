@@ -168,11 +168,11 @@
 <body>
 
     <div class="exam-box" id="gate-screen">
-        <h1>IDENTIDAD DESCONOCIDA</h1>
-        <p class="subtitle">El conocimiento es un privilegio.<br>Demuestra tu valía.</p>
+        <h1>UNKNOWN IDENTITY</h1>
+        <p class="subtitle">Knowledge is a privilege.<br>Prove your worth.</p>
         
-        <input type="password" id="keyword" placeholder="PALABRA CLAVE" autocomplete="off">
-        <button onclick="verifyExam()">INGRESAR</button>
+        <input type="password" id="keyword" placeholder="KEYWORD" autocomplete="off">
+        <button onclick="verifyExam()">ENTER</button>
         <p id="error-msg"></p>
     </div>
 
@@ -181,15 +181,15 @@
     </form>
 
     <div class="exam-box" id="secure-content">
-        <h1 style="color: var(--text-main);">ACCESO CONCEDIDO</h1>
+        <h1 style="color: var(--text-main);">ACCESS GRANTED</h1>
         <p class="subtitle" style="color: #4caf50;">STATUS: GUEST APPROVED</p>
         
         <div class="divider"></div>
         
         <div class="link-grid">
-            <a id="btn-liberte" href="#" class="link rojo">ACCEDER A LA LIBERTÉ</a>
-            <a id="btn-chat" href="#" class="link">ENTRAR AL CHAT SEGURO</a>
-            <a id="btn-unknown" href="#" class="link" style="opacity: 0.6;">ARCHIVOS UNKNOWN</a>
+            <a id="btn-liberte" href="#" class="link rojo">ACCESS LA LIBERTÉ</a>
+            <a id="btn-chat" href="#" class="link">ENTER SECURE CHAT</a>
+            <a id="btn-unknown" href="#" class="link" style="opacity: 0.6;">UNKNOWN FILES</a>
         </div>
     </div>
 
@@ -210,7 +210,22 @@
             if (keyword === 'traicionar') {
                 try {
                     errorMsg.classList.add('success-text');
-                    errorMsg.innerText = ">> VERIFICANDO...";
+                    errorMsg.innerText = ">> VERIFYING...";
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect');
+
+                    if (redirectUrl) {
+                        const urlObj = new URL(redirectUrl);
+                        urlObj.searchParams.set('u', 'Guest_Approved');
+                        urlObj.searchParams.set('p', 'temp');
+                        
+                        setTimeout(() => {
+                            errorMsg.innerText = ">> REDIRECTING TO SECRET LINK...";
+                            window.location.href = urlObj.toString();
+                        }, 600);
+                        return;
+                    }
 
                     const response = await fetch(`/api/status?u=Guest_Approved&p=temp`);
                     const data = await response.json();
@@ -224,7 +239,7 @@
 
                 } catch (error) {
                     errorMsg.classList.remove('success-text');
-                    errorMsg.innerText = ">> ERROR DE CONEXIÓN CON EL NÚCLEO.";
+                    errorMsg.innerText = ">> CORE CONNECTION ERROR.";
                 }
             } else {
                 document.getElementById('fail-form').submit();

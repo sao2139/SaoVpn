@@ -2,25 +2,25 @@
 =============================================================
         CLAU NETWORK - HOSTED ON DARKVPN INFRASTRUCTURE
 =============================================================
-GENERADO: 19/3/2026, 4:10:32 p.m.
+GENERADO: 21/3/2026, 5:57:31 p.m.
 NÚCLEO: PYTHON QUANTUM CORE [v3.0-DARK_PYTHON_CORE]
 
 ENLACES DE ACCESO LIMPIOS (.clau)
 (Cada nodo requiere autenticación manual de usuario)
 
-1. HUB CENTRAL:  http://wgnlemvppa6dbr47dx7m43jviff55kwucvbfyt544ucihxczdx7.clau/
-2. LA LIBERTÉ:   http://p5c6azs26nqmwcrxq4rwvw2lbvwwv62irvitnmdhx5tl2yfkmio.clau/
-3. DATOS UNKNOWN:http://xj2qvwzekrwypxhxvt5b6r7avar7gxom7gcglcgkruib2mxw4w6.clau/
-4. CHAT SEGURO:  http://wamhac67aez6pmhpbqufobfw5t7s3v24x4qwyngn3ogygzynvaj.clau/
-5. GATEKEEPER:   http://jbazw7vm4kbbveymiklhjcoco2uom4xmteqf3kxcentrp2agaaf.clau/
-6. ADMIN ROOT:   http://wgnlemvppa6dbr47dx7m43jviff55kwucvbfyt544ucihxczdx7.clau/admin
+1. HUB CENTRAL:  http://fnijur6rtxglmynneuq6zecmzh2lsgkzswxsat56c6p7frm2p2q.clau/
+2. LA LIBERTÉ:   http://g2hdcdnwtldgb7263im72ubmo3kgr4pqyxjj663yqlsavlhtqds.clau/
+3. DATOS UNKNOWN:http://dpnz3nl7qncm4x4me72wametxiwdervetokp2n7i7e3uxjndumh.clau/
+4. CHAT SEGURO:  http://lgqditro5c2vmzhbywd34ess3fryda7f4mbyjeb3hehk5pnmcmz.clau/
+5. GATEKEEPER:   http://enefgluk3yyt6ynqs5rwvcqo6xstnx3azrplz2lhygbqc6jcaoi.clau/
+6. ADMIN ROOT:   http://fnijur6rtxglmynneuq6zecmzh2lsgkzswxsat56c6p7frm2p2q.clau/admin
 -------------------------------------------------------------
 [RED OCULTA ARACHNE]
-7. ARACHNE NEST:    http://5fu6qkisf52lyvvr5lgjrc65vmaxzfx3vwtuoac7jacj73a2dhn.arach/
-8. TOOL-1 ENTROPY:  http://evg7kiwjfv4vswjadxu6juzl2lmhr5p35pe2wk5aodo3e6wajvu.arach/
-9. TOOL-2 SCANNER:  http://ygry4jk4vwth5pzgyalvy2kxbp67vwhg3bbohrmmepxl5xjuf7i.arach/
-10.TOOL-3 CRACKER:  http://bkrxg7yf7gjyqvsrwmddm3vrqpdakkpxlhwln2ubnmvxbprtmmi.arach/
-11.TOOL-4 CIPHER:   http://dspaihfvr6vztn5qaopuxze4vuabtrwwaaw2s5vzjo3casbrz3k.arach/
-12.TOOL-5 STEGO:    http://3kyujuwdixsqfb54y5edlcfskc34puiukr5pk5kr5qed2ledjgk.arach/
-13.TOOL-6 QKD:      http://zxchy6erzfhrcwm5n5odskcbxfvl3lngw7wivrfnfoui6swimdi.arach/
+7. ARACHNE NEST:    http://sq3x346t6vlwe5m6fwabwhrckqg2bbxpz2g5gt2cthj652wxu2l.arach/
+8. TOOL-1 ENTROPY:  http://ap4yjf3dvofkcbwuejchdd2cem6slpydjddjs6stso6lmqpdh3h.arach/
+9. TOOL-2 SCANNER:  http://phis5rk34gw5odk7j5fzxdlurtgu4oyiaz26j6k6oyx2u3d7ogs.arach/
+10.TOOL-3 CRACKER:  http://xh4lkfhkqgqb5ryj3l7egtz4vvnhnker2zkfhzyquj5agir2ea3.arach/
+11.TOOL-4 CIPHER:   http://pnosget24izlhmimpdcsgfnrjrw2raidg4ocdo2thdxjjsrcgl3.arach/
+12.TOOL-5 STEGO:    http://duyzfjfccdjz5r2qmtxzx53jwkjgdcxnho2fnqozcnpb6op3dbg.arach/
+13.TOOL-6 QKD:      http://nlsgys54hu4a7euucyeeraotsb2rqrpbpb5t36sazvf6owzuisu.arach/
 =============================================================

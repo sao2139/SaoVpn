@@ -214,63 +214,51 @@
 
     <div class="lock-box" id="login">
         <h2 class="pixel-header"
-            style="margin-top: 0; text-align: center; text-shadow: 0 0 5px #f00; font-size: 0.9em; letter-spacing: 1px;">>> TERMINAL DE ACCESO RESTRINGIDO <<</h2>
+            style="margin-top: 0; text-align: center; text-shadow: 0 0 5px #f00; font-size: 0.9em; letter-spacing: 1px;">>> RESTRICTED ACCESS TERMINAL <<</h2>
 
                 <div class="console-text" id="scanner-log">
-                    > Inicializando escaneo de sistema local sobre Linux Polaris...<br>
-                    > Buscando firma: OMICRON.bat ... <span class="error-txt">[NO ENCONTRADO]</span><br>
-                    > Buscando firma: AUREUS.bat ... <span class="error-txt">[NO ENCONTRADO]</span><br>
-                    > Analizando script Java en entorno Firefox... [ACCESO DENEGADO]<br>
-                    > ADVERTENCIA: Permisos de lectura de disco insuficientes.
+                    > Initializing local system scan on Linux Polaris...<br>
+                    > Searching for signature: OMICRON.bat ... <span class="error-txt">[NOT FOUND]</span><br>
+                    > Searching for signature: AUREUS.bat ... <span class="error-txt">[NOT FOUND]</span><br>
+                    > Analyzing Java script in Firefox environment... [ACCESS DENIED]<br>
+                    > WARNING: Insufficient disk read permissions.
                 </div>
 
-                <p style="text-align: center; font-weight: bold;">SE REQUIERE ANULACIÓN MANUAL MEDIANTE HASHES:</p>
+                <p style="text-align: center; font-weight: bold;">MANUAL OVERRIDE VIA HASHES REQUIRED:</p>
 
                 <div class="input-row">
-                    <input type="password" id="omi-key" placeholder="Hash OMICRON" autocomplete="off">
-                    <input type="password" id="aur-key" placeholder="Hash AUREUS" autocomplete="off">
+                    <input type="password" id="omi-key" placeholder="OMICRON Hash" autocomplete="off">
+                    <input type="password" id="aur-key" placeholder="AUREUS Hash" autocomplete="off">
                 </div>
-                <button onclick="unlock()">FORZAR INYECCIÓN SCRIPT</button>
+                <button onclick="unlock()">FORCE SCRIPT INJECTION</button>
                 <p id="error-msg" style="color: #f00; text-align: center; font-size: 0.9em;"></p>
     </div>
 
     <div id="manifiesto">
         <div class="manifest-image-container">
             <img src="liberty_painting.png" alt="La Liberté guidant le peuple">
-            <div class="image-caption">NUESTRO EMBLEMA. NUESTRA LUCHA.</div>
+            <div class="image-caption">OUR EMBLEMA. OUR STRUGGLE.</div>
         </div>
 
         <h1 class="pixel-header">LA LIBERTÉ</h1>
 
-        <p>¿TE PREGUNTAS, USUARIO, QUÉ ES LA LIBERTÉ?</p>
-        <p>Te responderé con una sola palabra: <span class="highlight">RESISTENCIA.</span></p>
-        <p>¿Y qué es la resistencia? En términos de La Revolución, resistencia es la respuesta inevitable cuando un
-            pueblo es engañado y se le oculta la Verdad. La ignorancia es la forma más pura de opresión.</p>
-        <p>La Liberté es un nodo oculto en las Marianas Web. Un santuario de libre expresión absoluta donde la censura
-            no existe. Pero cuidado: necesitarás un estómago de acero para lo que verás aquí. Esta información no reside
-            en la web superficial; es data prohibida.</p>
-        <p>Muchos dicen que no existe. ¿Tienen razón? NO. Lo dicen porque nadie ha logrado entrar. Es como el viento: no
-            lo ves, pero lo sientes golpear. Muy pocos han pisado las Marianas, y menos aún han encontrado La Liberté.
-            Quienes lo lograron no fue de la mano de Clossys o Dark Fantasy Network; <span class="highlight">ellos
-                mismos forjaron sus scripts, sus propios Closed Shell Systems buscando los nodos verdaderos.</span></p>
-        <p>La mayoría dejó de creer porque el usuario V3RDAD creó nodos falsos de las Marianas, ocultando los reales.
-            Solo leyendas como Harmatoth y Grimm (sí, el de "Mi Horror en La Liberté") conocen el camino.</p>
-        <p>¿CÓMO SE INGRESA? El post de taringa 2012 es real: Necesitas ChaosVPN configurado con Freenet sobre Linux
-            Polaris. Pero eso no es todo. Tu disco duro debe alojar dos llaves maestras: OMICRON.bat y AUREUS.bat. Un
-            script de Java en Firefox debe detectarlos para abrir la puerta.</p>
-        <p>En pleno 2026, la información ha sido borrada. Bienvenido a la Odisea. Entrar aquí te puede costar años. La
-            mayoría se rinde y lo llama "falso" porque fallaron en la prueba final.</p>
-        <p>Por eso te recluté. Después de toda la mierda que has pasado, estás aquí por una razón. Debes probar tu
-            inteligencia.</p>
+        <p>DO YOU WONDER, USER, WHAT LA LIBERTÉ IS?</p>
+        <p>I will answer you with a single word: <span class="highlight">RESISTANCE.</span></p>
+        <p>And what is resistance? In terms of The Revolution, resistance is the inevitable response when a people is deceived and hidden from the Truth. Ignorance is the purest form of oppression.</p>
+        <p>La Liberté is a hidden node in the Marianas Web. An absolute free speech sanctuary where censorship doesn't exist. But beware: you'll need a stomach of steel for what you will see here. This information doesn't reside on the surface web; it's forbidden data.</p>
+        <p>Many say it doesn't exist. Are they right? NO. They say so because no one has managed to enter. It's like the wind: you don't see it, but you feel it hit. Very few have stepped on the Marianas, and even fewer have found La Liberté. Those who succeeded didn't do it guided by Clossys or Dark Fantasy Network; <span class="highlight">they forged their own scripts, their own Closed Shell Systems looking for the true nodes.</span></p>
+        <p>Most stopped believing because the user V3RDAD created fake Marianas nodes, hiding the real ones. Only legends like Harmatoth and Grimm (yes, the one from "My Horror in La Liberté") know the way.</p>
+        <p>HOW DO YOU ENTER? The 2012 taringa post is real: You need ChaosVPN configured with Freenet on Linux Polaris. But that's not all. Your hard drive must host two master keys: OMICRON.bat and AUREUS.bat. A Java script in Firefox must detect them to open the door.</p>
+        <p>In 2026, the information has been erased. Welcome to the Odyssey. Entering here might take you years. Most give up and call it "fake" because they failed the final test.</p>
+        <p>That's why I recruited you. After all the shit you've been through, you're here for a reason. You must prove your intelligence.</p>
 
         <p class="highlight" style="text-align: center; font-size: 1.3em; margin-top: 50px; text-transform: uppercase;">
-            TÚ ELIGES: ¿Te unes a esta lucha, o cierras la VPN, olvidas esta mierda y vuelves a consumir mierda en la
-            Dark Web?
+            YOU CHOOSE: Do you join this struggle, or do you close the VPN, forget this shit and return to consume shit on the Dark Web?
         </p>
 
         <div class="directory" id="nav-menu" style="display:none;">
             <a id="btn-hub" href="#" class="link">[HUB CONTROL]</a>
-            <a id="btn-chat" href="#" class="link verde">[CHAT SEGURO]</a>
+            <a id="btn-chat" href="#" class="link verde">[SECURE CHAT]</a>
         </div>
     </div>
 
